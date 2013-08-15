@@ -1,0 +1,25 @@
+{
+  "name": "willdurand/hateoas-bundle",
+  "description": "Integrates the Hateoas library into Symfony2.",
+  "keywords": [ "rest", "hateoas" ],
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "William Durand",
+      "email": "william.durand1@gmail.com"
+    }
+  ],
+  "require": {
+    "symfony/framework-bundle": ">=2.0,<2.4-dev",
+    "symfony/routing": ">=2.0,<2.4-dev",
+    "willdurand/hateoas": "~2.0@dev"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
+  },
+  "target-dir": "Bazinga/Bundle/HateoasBundle",
+  "minimum-stability": "dev"
+}
