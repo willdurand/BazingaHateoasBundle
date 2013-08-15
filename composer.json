@@ -1,6 +1,6 @@
 {
   "name": "willdurand/hateoas-bundle",
-  "description": "Integrates the Hateoas library into Symfony2.",
+  "description": "Integration of Hateoas into Symfony2.",
   "keywords": [ "rest", "hateoas" ],
   "type": "symfony-bundle",
   "license": "MIT",
