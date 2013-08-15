@@ -13,13 +13,13 @@
   "require": {
     "symfony/framework-bundle": ">=2.0,<2.4-dev",
     "symfony/routing": ">=2.0,<2.4-dev",
-    "willdurand/hateoas": "~2.0@dev"
+    "willdurand/hateoas": "~2.0@dev",
+    "jms/serializer": "~0.13@dev"
   },
   "require-dev": {
   },
   "autoload": {
     "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
   },
-  "target-dir": "Bazinga/Bundle/HateoasBundle",
-  "minimum-stability": "dev"
+  "target-dir": "Bazinga/Bundle/HateoasBundle"
 }
