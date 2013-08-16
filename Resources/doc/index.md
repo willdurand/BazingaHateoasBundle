@@ -1,11 +1,14 @@
 BazingaHateoasBundle
-======================
+====================
 
 This bundle integrates [Hateoas](http://github.com/willdurand/Hateoas) into
 [Symfony2](http://symfony.com).
 
 Usage
 -----
+
+Basically, this bundle does not need anything. You should look at the [Hateoas
+documentation](http://github.com/willdurand/Hateoas) for more information.
 
 
 Installation
