@@ -11,7 +11,7 @@ $ curl -s https://getcomposer.org/installer | php
 $ php composer.phar install --dev
 $ phpunit
 EOT
-);
+    );
 }
 
 AnnotationRegistry::registerLoader('class_exists');

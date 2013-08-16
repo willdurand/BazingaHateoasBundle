@@ -33,7 +33,7 @@ class BazingaHateoasExtensionTest extends TestCase
             json_encode(array(
                 'name' => 'hello',
                 '_links' => array(
-                    'self' => array('href' => 'http://somewhere/simple-objects'),
+                    'all' => array('href' => 'http://somewhere/simple-objects'),
                 )
             )),
             $serializer->serialize(new SimpleObject('hello'), 'json')
