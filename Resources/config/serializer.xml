@@ -1,0 +1,120 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <!-- Configuration -->
+        <parameter key="hateoas.configuration.relations_repository.class">Hateoas\Configuration\RelationsRepository</parameter>
+        <parameter key="hateoas.configuration.metadata.yaml_driver.class">Hateoas\Configuration\Metadata\Driver\YamlDriver</parameter>
+        <parameter key="hateoas.configuration.metadata.annotation_driver.class">Hateoas\Configuration\Metadata\Driver\AnnotationDriver</parameter>
+
+        <!-- Factories -->
+        <parameter key="hateoas.link_factory.class">Hateoas\Factory\LinkFactory</parameter>
+        <parameter key="hateoas.route_factory.class">Hateoas\Factory\SymfonyRouteFactory</parameter>
+        <parameter key="hateoas.links_factory.class">Hateoas\Factory\LinksFactory</parameter>
+        <parameter key="hateoas.embeds_factory.class">Hateoas\Factory\EmbedsFactory</parameter>
+
+        <!-- Handlers -->
+        <parameter key="hateoas.property_path_handler.class">Hateoas\Handler\PropertyPathHandler</parameter>
+        <parameter key="hateoas.handler_manager.class">Hateoas\Handler\HandlerManager</parameter>
+
+        <!-- Serializers & Handlers -->
+        <parameter key="hateoas.serializer.xml.class">Hateoas\Serializer\XmlSerializer</parameter>
+        <parameter key="hateoas.serializer.json_hal.class">Hateoas\Serializer\JsonHalSerializer</parameter>
+        <parameter key="hateoas.serializer.handler.xml.class">Hateoas\Serializer\Handler\XmlResourceHandler</parameter>
+        <parameter key="hateoas.serializer.handler.json.class">Hateoas\Serializer\Handler\JsonResourceHandler</parameter>
+
+        <!-- Subscribers -->
+        <parameter key="hateoas.event_subscriber.xml.class">Hateoas\Serializer\EventSubscriber\XmlEventSubscriber</parameter>
+        <parameter key="hateoas.event_subscriber.json.class">Hateoas\Serializer\EventSubscriber\JsonEventSubscriber</parameter>
+    </parameters>
+
+    <services>
+        <!-- Configuration -->
+        <service id="hateoas.configuration.relations_repository" class="%hateoas.configuration.relations_repository.class%" public="false">
+            <argument type="service" id="hateoas.configuration.metadata_factory" />
+        </service>
+
+        <service id="hateoas.configuration.metadata.yaml_driver" class="%hateoas.configuration.metadata.yaml_driver.class%" public="false">
+            <argument type="service" id="jms_serializer.metadata.file_locator" />
+        </service>
+
+        <service id="hateoas.configuration.metadata.annotation_driver" class="%hateoas.configuration.metadata.annotation_driver.class%" public="false">
+            <argument type="service" id="annotation_reader" />
+        </service>
+
+        <service id="hateoas.configuration.metadata.chain_driver" class="%jms_serializer.metadata.chain_driver.class%" public="false">
+            <argument type="collection">
+                <argument type="service" id="hateoas.configuration.metadata.yaml_driver" />
+                <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
+            </argument>
+        </service>
+
+        <service id="hateoas.configuration.metadata_factory" class="%jms_serializer.metadata.metadata_factory.class%" public="false">
+            <argument type="service" id="hateoas.configuration.metadata.chain_driver" />
+            <argument></argument>
+            <argument>%kernel.debug%</argument>
+            <!-- cache does not work here :( -->
+        </service>
+
+        <!-- Factories -->
+        <service id="hateoas.link_factory" class="%hateoas.link_factory.class%" public="false">
+            <argument type="service" id="hateoas.handler_manager" />
+            <argument type="service" id="hateoas.route_factory" />
+        </service>
+
+        <service id="hateoas.route_factory" class="%hateoas.route_factory.class%" public="false">
+            <argument type="service" id="router" />
+        </service>
+
+        <service id="hateoas.links_factory" class="%hateoas.links_factory.class%" public="false">
+            <argument type="service" id="hateoas.configuration.relations_repository" />
+            <argument type="service" id="hateoas.link_factory" />
+        </service>
+
+        <service id="hateoas.embeds_factory" class="%hateoas.embeds_factory.class%" public="false">
+            <argument type="service" id="hateoas.configuration.relations_repository" />
+            <argument type="service" id="hateoas.handler_manager" />
+        </service>
+
+        <!-- Handlers -->
+        <service id="hateoas.property_path_handler" class="%hateoas.property_path_handler.class%" public="false"></service>
+
+        <service id="hateoas.handler_manager" class="%hateoas.handler_manager.class%" public="false">
+            <call method="setHandler">
+                <argument>this</argument>
+                <argument type="service" id="hateoas.property_path_handler" />
+            </call>
+        </service>
+
+        <!-- Serializers & Handlers -->
+        <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false"></service>
+        <service id="hateoas.serializer.json_hal" class="%hateoas.serializer.json_hal.class%" public="false"></service>
+
+        <service id="hateoas.serializer.handler.xml" class="%hateoas.serializer.handler.xml.class%">
+            <tag name="jms_serializer.subscribing_handler" />
+            <argument type="service" id="hateoas.serializer.xml" />
+        </service>
+
+        <service id="hateoas.serializer.handler.json" class="%hateoas.serializer.handler.json.class%">
+            <tag name="jms_serializer.subscribing_handler" />
+            <argument type="service" id="hateoas.serializer.json_hal" />
+        </service>
+
+        <!-- Subscribers -->
+        <service id="hateoas.event_subscriber.xml" class="%hateoas.event_subscriber.xml.class%">
+            <tag name="jms_serializer.event_subscriber" />
+            <argument type="service" id="hateoas.serializer.xml" />
+            <argument type="service" id="hateoas.links_factory" />
+            <argument type="service" id="hateoas.embeds_factory" />
+        </service>
+
+        <service id="hateoas.event_subscriber.json" class="%hateoas.event_subscriber.json.class%">
+            <tag name="jms_serializer.event_subscriber" />
+            <argument type="service" id="hateoas.serializer.json_hal" />
+            <argument type="service" id="hateoas.links_factory" />
+            <argument type="service" id="hateoas.embeds_factory" />
+        </service>
+    </services>
+</container>

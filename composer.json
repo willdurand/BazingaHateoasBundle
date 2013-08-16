@@ -14,6 +14,7 @@
     "symfony/framework-bundle": ">=2.0,<2.4-dev",
     "symfony/routing": ">=2.0,<2.4-dev",
     "willdurand/hateoas": "~2.0@dev",
+    "jms/serializer-bundle": "0.12.*@dev",
     "jms/serializer": "~0.13@dev"
   },
   "require-dev": {
