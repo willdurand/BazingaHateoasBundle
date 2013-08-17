@@ -13,8 +13,7 @@
   "require": {
     "symfony/framework-bundle": "~2.1",
     "willdurand/hateoas": "~2.0@dev",
-    "jms/serializer-bundle": "~0.12@dev",
-    "jms/serializer": "~0.13@dev"
+    "jms/serializer-bundle": "~0.12"
   },
   "autoload": {
     "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
