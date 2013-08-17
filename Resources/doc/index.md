@@ -40,6 +40,20 @@ public function registerBundles()
 ```
 
 
+Reference Configuration
+-----------------------
+
+``` yaml
+# app/config/config*.yml
+
+bazinga_hateoas:
+    metadata:
+        cache:                file
+        file_cache:
+            dir:              %kernel.cache_dir%/hateoas
+```
+
+
 Testing
 -------
 
