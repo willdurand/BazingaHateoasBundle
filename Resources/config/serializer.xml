@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <!-- Configuration -->
+        <!-- Configuration / Metadata -->
         <parameter key="hateoas.configuration.relations_repository.class">Hateoas\Configuration\RelationsRepository</parameter>
         <parameter key="hateoas.configuration.metadata.yaml_driver.class">Hateoas\Configuration\Metadata\Driver\YamlDriver</parameter>
         <parameter key="hateoas.configuration.metadata.annotation_driver.class">Hateoas\Configuration\Metadata\Driver\AnnotationDriver</parameter>
@@ -31,7 +31,7 @@
     </parameters>
 
     <services>
-        <!-- Configuration -->
+        <!-- Configuration / Metadata -->
         <service id="hateoas.configuration.relations_repository" class="%hateoas.configuration.relations_repository.class%" public="false">
             <argument type="service" id="hateoas.configuration.metadata_factory" />
         </service>
@@ -51,11 +51,18 @@
             </argument>
         </service>
 
+        <service id="hateoas.configuration.metadata.cache.file_cache" class="%jms_serializer.metadata.cache.file_cache.class%" public="false">
+            <argument></argument> <!-- Directory -->
+        </service>
+        <service id="hateoas.configuration.metadata.cache" alias="hateoas.configuration.metadata.cache.file_cache" public="false"></service>
+
         <service id="hateoas.configuration.metadata_factory" class="%jms_serializer.metadata.metadata_factory.class%" public="false">
             <argument type="service" id="hateoas.configuration.metadata.chain_driver" />
-            <argument></argument>
+            <argument>Metadata\ClassHierarchyMetadata</argument>
             <argument>%kernel.debug%</argument>
-            <!-- cache does not work here :( -->
+            <call method="setCache">
+                <argument type="service" id="hateoas.configuration.metadata.cache" on-invalid="ignore" />
+            </call>
         </service>
 
         <!-- Factories -->
