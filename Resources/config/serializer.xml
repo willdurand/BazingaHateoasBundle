@@ -11,23 +11,26 @@
 
         <!-- Factories -->
         <parameter key="hateoas.link_factory.class">Hateoas\Factory\LinkFactory</parameter>
-        <parameter key="hateoas.route_factory.class">Hateoas\Factory\SymfonyRouteFactory</parameter>
         <parameter key="hateoas.links_factory.class">Hateoas\Factory\LinksFactory</parameter>
         <parameter key="hateoas.embeds_factory.class">Hateoas\Factory\EmbedsFactory</parameter>
 
-        <!-- Handlers -->
-        <parameter key="hateoas.property_path_handler.class">Hateoas\Handler\PropertyPathHandler</parameter>
-        <parameter key="hateoas.handler_manager.class">Hateoas\Handler\HandlerManager</parameter>
+        <!-- Expressions -->
+        <parameter key="hateoas.expression.evaluator.class">Hateoas\Expression\ExpressionEvaluator</parameter>
+        <parameter key="symfony.expression.language.class">Symfony\Component\ExpressionLanguage\ExpressionLanguage</parameter>
 
         <!-- Serializers & Handlers -->
         <parameter key="hateoas.serializer.xml.class">Hateoas\Serializer\XmlSerializer</parameter>
         <parameter key="hateoas.serializer.json_hal.class">Hateoas\Serializer\JsonHalSerializer</parameter>
         <parameter key="hateoas.serializer.handler.xml.class">Hateoas\Serializer\Handler\XmlResourceHandler</parameter>
         <parameter key="hateoas.serializer.handler.json.class">Hateoas\Serializer\Handler\JsonResourceHandler</parameter>
+        <parameter key="hateoas.serializer.exclusion_manager.class">Hateoas\Serializer\ExclusionManager</parameter>
 
         <!-- Subscribers -->
         <parameter key="hateoas.event_subscriber.xml.class">Hateoas\Serializer\EventSubscriber\XmlEventSubscriber</parameter>
         <parameter key="hateoas.event_subscriber.json.class">Hateoas\Serializer\EventSubscriber\JsonEventSubscriber</parameter>
+
+        <!-- Generators -->
+        <parameter key="hateoas.generator.registry.class">Hateoas\UrlGenerator\UrlGeneratorRegistry</parameter>
     </parameters>
 
     <services>
@@ -67,33 +70,36 @@
 
         <!-- Factories -->
         <service id="hateoas.link_factory" class="%hateoas.link_factory.class%" public="false">
-            <argument type="service" id="hateoas.handler_manager" />
-            <argument type="service" id="hateoas.route_factory" />
-        </service>
-
-        <service id="hateoas.route_factory" class="%hateoas.route_factory.class%" public="false">
-            <argument type="service" id="router" />
+            <argument type="service" id="hateoas.expression.evaluator" />
+            <argument type="service" id="hateoas.generator.registry" />
         </service>
 
         <service id="hateoas.links_factory" class="%hateoas.links_factory.class%" public="false">
             <argument type="service" id="hateoas.configuration.relations_repository" />
             <argument type="service" id="hateoas.link_factory" />
+            <argument type="service" id="hateoas.serializer.exclusion_manager" />
         </service>
 
         <service id="hateoas.embeds_factory" class="%hateoas.embeds_factory.class%" public="false">
             <argument type="service" id="hateoas.configuration.relations_repository" />
-            <argument type="service" id="hateoas.handler_manager" />
+            <argument type="service" id="hateoas.expression.evaluator" />
+            <argument type="service" id="hateoas.serializer.exclusion_manager" />
         </service>
 
-        <!-- Handlers -->
-        <service id="hateoas.property_path_handler" class="%hateoas.property_path_handler.class%" public="false"></service>
-
-        <service id="hateoas.handler_manager" class="%hateoas.handler_manager.class%" public="false">
-            <call method="setHandler">
-                <argument>this</argument>
-                <argument type="service" id="hateoas.property_path_handler" />
+        <!-- Expressions -->
+        <service id="hateoas.expression.evaluator" class="%hateoas.expression.evaluator.class%">
+            <argument type="service" id="symfony.expression.language" />
+            <call method="setContextValue">
+                <argument>container</argument>
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setContextValue">
+                <argument>request</argument>
+                <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
         </service>
+
+        <service id="symfony.expression.language" class="%symfony.expression.language.class%" />
 
         <!-- Serializers & Handlers -->
         <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false"></service>
@@ -107,6 +113,10 @@
         <service id="hateoas.serializer.handler.json" class="%hateoas.serializer.handler.json.class%">
             <tag name="jms_serializer.subscribing_handler" />
             <argument type="service" id="hateoas.serializer.json_hal" />
+        </service>
+
+        <service id="hateoas.serializer.exclusion_manager" class="%hateoas.serializer.exclusion_manager.class%">
+            <argument type="service" id="hateoas.expression.evaluator" />
         </service>
 
         <!-- Subscribers -->
@@ -123,5 +133,8 @@
             <argument type="service" id="hateoas.links_factory" />
             <argument type="service" id="hateoas.embeds_factory" />
         </service>
+
+        <!-- Generators -->
+        <service id="hateoas.generator.registry" class="%hateoas.generator.registry.class%" />
     </services>
 </container>

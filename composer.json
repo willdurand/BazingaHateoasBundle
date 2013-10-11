@@ -15,6 +15,9 @@
     "willdurand/hateoas": "~2.0@dev",
     "jms/serializer-bundle": "~0.12"
   },
+  "require-dev": {
+    "symfony/expression-language": "~2.4@dev"
+  },
   "autoload": {
     "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
   },
