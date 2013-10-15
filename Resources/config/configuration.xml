@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="hateoas.configuration.provider.resolver.chain.class">Hateoas\Configuration\Provider\Resolver\ChainResolver</parameter>
+        <parameter key="hateoas.configuration.provider.resolver.method.class">Hateoas\Configuration\Provider\Resolver\MethodResolver</parameter>
+        <parameter key="hateoas.configuration.provider.resolver.static_method.class">Hateoas\Configuration\Provider\Resolver\StaticMethodResolver</parameter>
+        <parameter key="hateoas.configuration.provider.resolver.symfony_container.class">Hateoas\Configuration\Provider\Resolver\SymfonyContainerResolver</parameter>
+        <parameter key="hateoas.configuration.relation_provider.class">Hateoas\Configuration\Provider\RelationProvider</parameter>
+        <parameter key="hateoas.configuration.relations_repository.class">Hateoas\Configuration\RelationsRepository</parameter>
+        <parameter key="hateoas.configuration.metadata.yaml_driver.class">Hateoas\Configuration\Metadata\Driver\YamlDriver</parameter>
+        <parameter key="hateoas.configuration.metadata.annotation_driver.class">Hateoas\Configuration\Metadata\Driver\AnnotationDriver</parameter>
+    </parameters>
+
+    <services>
+        <service id="hateoas.configuration.provider.resolver.chain" class="%hateoas.configuration.provider.resolver.chain.class%" public="false">
+            <argument type="collection">
+                <argument type="service" id="hateoas.configuration.provider.resolver.method" />
+                <argument type="service" id="hateoas.configuration.provider.resolver.static_method" />
+                <argument type="service" id="hateoas.configuration.provider.resolver.symfony_container" />
+            </argument>
+        </service>
+
+        <service id="hateoas.configuration.provider.resolver.method" class="%hateoas.configuration.provider.resolver.method.class%" public="false"/>
+        <service id="hateoas.configuration.provider.resolver.static_method" class="%hateoas.configuration.provider.resolver.static_method.class%" public="false"/>
+        <service id="hateoas.configuration.provider.resolver.symfony_container" class="%hateoas.configuration.provider.resolver.symfony_container.class%" public="false">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="hateoas.configuration.provider.resolver" alias="hateoas.configuration.provider.resolver.chain"/>
+
+        <service id="hateoas.configuration.relation_provider" class="%hateoas.configuration.relation_provider.class%" public="false">
+            <argument type="service" id="hateoas.configuration.metadata_factory" />
+            <argument type="service" id="hateoas.configuration.provider.resolver" />
+        </service>
+
+        <service id="hateoas.configuration.relations_repository" class="%hateoas.configuration.relations_repository.class%" public="false">
+            <argument type="service" id="hateoas.configuration.metadata_factory" />
+            <argument type="service" id="hateoas.configuration.relation_provider" />
+        </service>
+
+        <service id="hateoas.configuration.metadata.yaml_driver" class="%hateoas.configuration.metadata.yaml_driver.class%" public="false">
+            <argument type="service" id="jms_serializer.metadata.file_locator" />
+        </service>
+
+        <service id="hateoas.configuration.metadata.annotation_driver" class="%hateoas.configuration.metadata.annotation_driver.class%" public="false">
+            <argument type="service" id="annotation_reader" />
+        </service>
+
+        <service id="hateoas.configuration.metadata.chain_driver" class="%jms_serializer.metadata.chain_driver.class%" public="false">
+            <argument type="collection">
+                <argument type="service" id="hateoas.configuration.metadata.yaml_driver" />
+                <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
+            </argument>
+        </service>
+
+        <service id="hateoas.configuration.metadata.cache.file_cache" class="%jms_serializer.metadata.cache.file_cache.class%" public="false">
+            <argument></argument> <!-- Directory -->
+        </service>
+        <service id="hateoas.configuration.metadata.cache" alias="hateoas.configuration.metadata.cache.file_cache" public="false"></service>
+
+        <service id="hateoas.configuration.metadata_factory" class="%jms_serializer.metadata.metadata_factory.class%" public="false">
+            <argument type="service" id="hateoas.configuration.metadata.chain_driver" />
+            <argument>Metadata\ClassHierarchyMetadata</argument>
+            <argument>%kernel.debug%</argument>
+            <call method="setCache">
+                <argument type="service" id="hateoas.configuration.metadata.cache" on-invalid="ignore" />
+            </call>
+        </service>
+    </services>
+</container>

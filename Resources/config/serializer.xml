@@ -4,11 +4,6 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <!-- Configuration / Metadata -->
-        <parameter key="hateoas.configuration.relations_repository.class">Hateoas\Configuration\RelationsRepository</parameter>
-        <parameter key="hateoas.configuration.metadata.yaml_driver.class">Hateoas\Configuration\Metadata\Driver\YamlDriver</parameter>
-        <parameter key="hateoas.configuration.metadata.annotation_driver.class">Hateoas\Configuration\Metadata\Driver\AnnotationDriver</parameter>
-
         <!-- Factories -->
         <parameter key="hateoas.link_factory.class">Hateoas\Factory\LinkFactory</parameter>
         <parameter key="hateoas.links_factory.class">Hateoas\Factory\LinksFactory</parameter>
@@ -29,45 +24,12 @@
         <parameter key="hateoas.event_subscriber.xml.class">Hateoas\Serializer\EventSubscriber\XmlEventSubscriber</parameter>
         <parameter key="hateoas.event_subscriber.json.class">Hateoas\Serializer\EventSubscriber\JsonEventSubscriber</parameter>
 
-        <!-- Generators -->
-        <parameter key="hateoas.generator.registry.class">Hateoas\UrlGenerator\UrlGeneratorRegistry</parameter>
+        <!-- Inline deferrers -->
+        <parameter key="hateoas.inline_deferrer.embeds.class">Hateoas\Serializer\Metadata\InlineDeferrer</parameter>
+        <parameter key="hateoas.inline_deferrer.links.class">Hateoas\Serializer\Metadata\InlineDeferrer</parameter>
     </parameters>
 
     <services>
-        <!-- Configuration / Metadata -->
-        <service id="hateoas.configuration.relations_repository" class="%hateoas.configuration.relations_repository.class%" public="false">
-            <argument type="service" id="hateoas.configuration.metadata_factory" />
-        </service>
-
-        <service id="hateoas.configuration.metadata.yaml_driver" class="%hateoas.configuration.metadata.yaml_driver.class%" public="false">
-            <argument type="service" id="jms_serializer.metadata.file_locator" />
-        </service>
-
-        <service id="hateoas.configuration.metadata.annotation_driver" class="%hateoas.configuration.metadata.annotation_driver.class%" public="false">
-            <argument type="service" id="annotation_reader" />
-        </service>
-
-        <service id="hateoas.configuration.metadata.chain_driver" class="%jms_serializer.metadata.chain_driver.class%" public="false">
-            <argument type="collection">
-                <argument type="service" id="hateoas.configuration.metadata.yaml_driver" />
-                <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
-            </argument>
-        </service>
-
-        <service id="hateoas.configuration.metadata.cache.file_cache" class="%jms_serializer.metadata.cache.file_cache.class%" public="false">
-            <argument></argument> <!-- Directory -->
-        </service>
-        <service id="hateoas.configuration.metadata.cache" alias="hateoas.configuration.metadata.cache.file_cache" public="false"></service>
-
-        <service id="hateoas.configuration.metadata_factory" class="%jms_serializer.metadata.metadata_factory.class%" public="false">
-            <argument type="service" id="hateoas.configuration.metadata.chain_driver" />
-            <argument>Metadata\ClassHierarchyMetadata</argument>
-            <argument>%kernel.debug%</argument>
-            <call method="setCache">
-                <argument type="service" id="hateoas.configuration.metadata.cache" on-invalid="ignore" />
-            </call>
-        </service>
-
         <!-- Factories -->
         <service id="hateoas.link_factory" class="%hateoas.link_factory.class%" public="false">
             <argument type="service" id="hateoas.expression.evaluator" />
@@ -102,8 +64,8 @@
         <service id="symfony.expression.language" class="%symfony.expression.language.class%" />
 
         <!-- Serializers & Handlers -->
-        <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false"></service>
-        <service id="hateoas.serializer.json_hal" class="%hateoas.serializer.json_hal.class%" public="false"></service>
+        <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false" />
+        <service id="hateoas.serializer.json_hal" class="%hateoas.serializer.json_hal.class%" public="false" />
 
         <service id="hateoas.serializer.handler.xml" class="%hateoas.serializer.handler.xml.class%">
             <tag name="jms_serializer.subscribing_handler" />
@@ -132,9 +94,16 @@
             <argument type="service" id="hateoas.serializer.json_hal" />
             <argument type="service" id="hateoas.links_factory" />
             <argument type="service" id="hateoas.embeds_factory" />
+            <argument type="service" id="hateoas.inline_deferrer.embeds" />
+            <argument type="service" id="hateoas.inline_deferrer.links" />
         </service>
 
-        <!-- Generators -->
-        <service id="hateoas.generator.registry" class="%hateoas.generator.registry.class%" />
+        <service id="hateoas.inline_deferrer.embeds" class="%hateoas.inline_deferrer.embeds.class%" public="false">
+            <argument type="service" id="jms_serializer.metadata_factory"/>
+        </service>
+
+        <service id="hateoas.inline_deferrer.links" class="%hateoas.inline_deferrer.links.class%" public="false">
+            <argument type="service" id="jms_serializer.metadata_factory"/>
+        </service>
     </services>
 </container>

@@ -25,7 +25,9 @@ class BazingaHateoasExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        $loader->load('serializer.xml');
+        foreach (array('serializer.xml', 'configuration.xml', 'generator.xml') as $file) {
+            $loader->load($file);
+        }
 
         // Based on JMSSerializerBundle
         if ('none' === $config['metadata']['cache']) {
