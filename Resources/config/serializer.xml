@@ -99,11 +99,11 @@
         </service>
 
         <service id="hateoas.inline_deferrer.embeds" class="%hateoas.inline_deferrer.embeds.class%" public="false">
-            <argument type="service" id="hateoas.configuration.metadata_factory"/>
+            <argument type="service" id="jms_serializer.metadata_factory"/>
         </service>
 
         <service id="hateoas.inline_deferrer.links" class="%hateoas.inline_deferrer.links.class%" public="false">
-            <argument type="service" id="hateoas.configuration.metadata_factory"/>
+            <argument type="service" id="jms_serializer.metadata_factory"/>
         </service>
     </services>
 </container>
