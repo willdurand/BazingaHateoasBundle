@@ -1,25 +1,25 @@
 {
-  "name": "willdurand/hateoas-bundle",
-  "description": "Integration of Hateoas into Symfony2.",
-  "keywords": [ "rest", "hateoas" ],
-  "type": "symfony-bundle",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "William Durand",
-      "email": "william.durand1@gmail.com"
+    "name": "willdurand/hateoas-bundle",
+    "description": "Integration of Hateoas into Symfony2.",
+    "keywords": [ "rest", "hateoas" ],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+        "name": "William Durand",
+        "email": "william.durand1@gmail.com"
     }
-  ],
-  "require": {
-    "symfony/framework-bundle": "~2.1",
-    "willdurand/hateoas": "~2.0@dev",
-    "jms/serializer-bundle": "~0.12"
-  },
-  "require-dev": {
-    "symfony/expression-language": "~2.4@dev"
-  },
-  "autoload": {
-    "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
-  },
-  "target-dir": "Bazinga/Bundle/HateoasBundle"
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.1",
+        "willdurand/hateoas": "~2.0@dev",
+        "jms/serializer-bundle": "~0.12"
+    },
+    "require-dev": {
+        "symfony/expression-language": "~2.4@dev"
+    },
+    "autoload": {
+        "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
+    },
+    "target-dir": "Bazinga/Bundle/HateoasBundle"
 }
