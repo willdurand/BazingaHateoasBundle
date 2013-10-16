@@ -21,5 +21,10 @@
     "autoload": {
         "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
     },
-    "target-dir": "Bazinga/Bundle/HateoasBundle"
+    "target-dir": "Bazinga/Bundle/HateoasBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }
