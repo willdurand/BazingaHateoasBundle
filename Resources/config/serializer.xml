@@ -16,8 +16,6 @@
         <!-- Serializers & Handlers -->
         <parameter key="hateoas.serializer.xml.class">Hateoas\Serializer\XmlSerializer</parameter>
         <parameter key="hateoas.serializer.json_hal.class">Hateoas\Serializer\JsonHalSerializer</parameter>
-        <parameter key="hateoas.serializer.handler.xml.class">Hateoas\Serializer\Handler\XmlResourceHandler</parameter>
-        <parameter key="hateoas.serializer.handler.json.class">Hateoas\Serializer\Handler\JsonResourceHandler</parameter>
         <parameter key="hateoas.serializer.exclusion_manager.class">Hateoas\Serializer\ExclusionManager</parameter>
 
         <!-- Subscribers -->
@@ -66,16 +64,6 @@
         <!-- Serializers & Handlers -->
         <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false" />
         <service id="hateoas.serializer.json_hal" class="%hateoas.serializer.json_hal.class%" public="false" />
-
-        <service id="hateoas.serializer.handler.xml" class="%hateoas.serializer.handler.xml.class%">
-            <tag name="jms_serializer.subscribing_handler" />
-            <argument type="service" id="hateoas.serializer.xml" />
-        </service>
-
-        <service id="hateoas.serializer.handler.json" class="%hateoas.serializer.handler.json.class%">
-            <tag name="jms_serializer.subscribing_handler" />
-            <argument type="service" id="hateoas.serializer.json_hal" />
-        </service>
 
         <service id="hateoas.serializer.exclusion_manager" class="%hateoas.serializer.exclusion_manager.class%">
             <argument type="service" id="hateoas.expression.evaluator" />
