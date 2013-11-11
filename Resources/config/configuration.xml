@@ -11,6 +11,7 @@
         <parameter key="hateoas.configuration.relation_provider.class">Hateoas\Configuration\Provider\RelationProvider</parameter>
         <parameter key="hateoas.configuration.relations_repository.class">Hateoas\Configuration\RelationsRepository</parameter>
         <parameter key="hateoas.configuration.metadata.yaml_driver.class">Hateoas\Configuration\Metadata\Driver\YamlDriver</parameter>
+        <parameter key="hateoas.configuration.metadata.xml_driver.class">Hateoas\Configuration\Metadata\Driver\XmlDriver</parameter>
         <parameter key="hateoas.configuration.metadata.annotation_driver.class">Hateoas\Configuration\Metadata\Driver\AnnotationDriver</parameter>
     </parameters>
 
@@ -45,6 +46,10 @@
             <argument type="service" id="jms_serializer.metadata.file_locator" />
         </service>
 
+        <service id="hateoas.configuration.metadata.xml_driver" class="%hateoas.configuration.metadata.xml_driver.class%" public="false">
+            <argument type="service" id="jms_serializer.metadata.file_locator" />
+        </service>
+
         <service id="hateoas.configuration.metadata.annotation_driver" class="%hateoas.configuration.metadata.annotation_driver.class%" public="false">
             <argument type="service" id="annotation_reader" />
         </service>
@@ -52,6 +57,7 @@
         <service id="hateoas.configuration.metadata.chain_driver" class="%jms_serializer.metadata.chain_driver.class%" public="false">
             <argument type="collection">
                 <argument type="service" id="hateoas.configuration.metadata.yaml_driver" />
+                <argument type="service" id="hateoas.configuration.metadata.xml_driver" />
                 <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
             </argument>
         </service>
