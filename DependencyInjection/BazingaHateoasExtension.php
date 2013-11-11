@@ -12,6 +12,7 @@ namespace Bazinga\Bundle\HateoasBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 
@@ -41,7 +42,7 @@ class BazingaHateoasExtension extends Extension
 
             if (!file_exists($dir)) {
                 if (!$rs = @mkdir($dir, 0777, true)) {
-                    throw new RuntimeException(sprintf('Could not create cache directory "%s".', $dir));
+                    throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $dir));
                 }
             }
         } else {
