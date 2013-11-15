@@ -62,7 +62,11 @@
         <service id="symfony.expression.language" class="%symfony.expression.language.class%" />
 
         <!-- Serializers & Handlers -->
-        <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false" />
+        <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false">
+            <call method="setMetadataFactory">
+                <argument type="service" id="jms_serializer.metadata_factory" />
+            </call>
+        </service>
         <service id="hateoas.serializer.json_hal" class="%hateoas.serializer.json_hal.class%" public="false" />
 
         <service id="hateoas.serializer.exclusion_manager" class="%hateoas.serializer.exclusion_manager.class%">
