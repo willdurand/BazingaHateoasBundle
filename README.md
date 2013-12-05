@@ -3,7 +3,7 @@ BazingaHateoasBundle
 
 [![Build Status](https://secure.travis-ci.org/willdurand/BazingaHateoasBundle.png)](http://travis-ci.org/willdurand/BazingaHateoasBundle)
 
-This bundle integrates [Hateoas](http://github.com/willdurand/Hateoas) into
+This bundle integrates [Hateoas](http://github.com/willdurand/Hateoas) with
 [Symfony2](http://symfony.com).
 
 

@@ -15,7 +15,7 @@ Installation
 ------------
 
 Require [`willdurand/hateoas-bundle`](https://packagist.org/packages/willdurand/hateoas-bundle)
-to your `composer.json` file:
+into your `composer.json` file:
 
 
 ``` json
@@ -25,6 +25,10 @@ to your `composer.json` file:
     }
 }
 ```
+
+**Protip:** you should browse the
+[`willdurand/hateoas-bundle`](https://packagist.org/packages/willdurand/hateoas-bundle)
+page to choose a stable version to use, avoid the `@stable` meta constraint.
 
 Register the bundle in `app/AppKernel.php`:
 
