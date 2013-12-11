@@ -49,11 +49,11 @@
         <!-- Expressions -->
         <service id="hateoas.expression.evaluator" class="%hateoas.expression.evaluator.class%">
             <argument type="service" id="symfony.expression.language" />
-            <call method="setContextValue">
+            <call method="setContextVariable">
                 <argument>container</argument>
                 <argument type="service" id="service_container"/>
             </call>
-            <call method="setContextValue">
+            <call method="setContextVariable">
                 <argument>request</argument>
                 <argument type="service" id="request" on-invalid="null" strict="false" />
             </call>
