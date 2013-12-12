@@ -11,7 +11,7 @@
 
         <!-- Expressions -->
         <parameter key="hateoas.expression.evaluator.class">Hateoas\Expression\ExpressionEvaluator</parameter>
-        <parameter key="symfony.expression.language.class">Symfony\Component\ExpressionLanguage\ExpressionLanguage</parameter>
+        <parameter key="symfony.expression.language.class">Symfony\Component\DependencyInjection\ExpressionLanguage</parameter>
 
         <!-- Serializers & Handlers -->
         <parameter key="hateoas.serializer.xml.class">Hateoas\Serializer\XmlSerializer</parameter>
@@ -49,14 +49,6 @@
         <!-- Expressions -->
         <service id="hateoas.expression.evaluator" class="%hateoas.expression.evaluator.class%">
             <argument type="service" id="symfony.expression.language" />
-            <call method="setContextVariable">
-                <argument>container</argument>
-                <argument type="service" id="service_container"/>
-            </call>
-            <call method="setContextVariable">
-                <argument>request</argument>
-                <argument type="service" id="request" on-invalid="null" strict="false" />
-            </call>
         </service>
 
         <service id="symfony.expression.language" class="%symfony.expression.language.class%" />
