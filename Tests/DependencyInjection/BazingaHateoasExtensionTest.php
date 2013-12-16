@@ -94,6 +94,7 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->set('annotation_reader', new AnnotationReader());
         $container->set('router', $router);
         $container->set('service_container', $container);
+        $container->set('debug.stopwatch', $this->getMock('Symfony\Component\Stopwatch\Stopwatch'));
 
         foreach ($extensions as $extension) {
             $container->registerExtension($extension);
