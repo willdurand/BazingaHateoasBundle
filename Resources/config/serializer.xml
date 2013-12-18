@@ -7,7 +7,7 @@
         <!-- Factories -->
         <parameter key="hateoas.link_factory.class">Hateoas\Factory\LinkFactory</parameter>
         <parameter key="hateoas.links_factory.class">Hateoas\Factory\LinksFactory</parameter>
-        <parameter key="hateoas.embeds_factory.class">Hateoas\Factory\EmbedsFactory</parameter>
+        <parameter key="hateoas.embeds_factory.class">Hateoas\Factory\EmbeddedsFactory</parameter>
 
         <!-- Expressions -->
         <parameter key="hateoas.expression.evaluator.class">Hateoas\Expression\ExpressionEvaluator</parameter>
