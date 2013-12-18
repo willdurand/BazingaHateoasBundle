@@ -11,7 +11,7 @@
     }
     ],
     "require": {
-        "symfony/framework-bundle": "~2.1",
+        "symfony/framework-bundle": "~2.2",
         "willdurand/hateoas": "~2.0",
         "jms/serializer-bundle": "~0.13"
     },
