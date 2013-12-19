@@ -11,7 +11,7 @@
 
         <!-- Expressions -->
         <parameter key="hateoas.expression.evaluator.class">Hateoas\Expression\ExpressionEvaluator</parameter>
-        <parameter key="symfony.expression.language.class">Symfony\Component\DependencyInjection\ExpressionLanguage</parameter>
+        <parameter key="bazinga_hateoas.expression_language.class">Bazinga\Bundle\HateoasBundle\ExpressionLanguage\ExpressionLanguage</parameter>
 
         <!-- Serializers & Handlers -->
         <parameter key="hateoas.serializer.xml.class">Hateoas\Serializer\XmlSerializer</parameter>
@@ -48,10 +48,14 @@
 
         <!-- Expressions -->
         <service id="hateoas.expression.evaluator" class="%hateoas.expression.evaluator.class%">
-            <argument type="service" id="symfony.expression.language" />
+            <argument type="service" id="bazinga_hateoas.expression_language" />
+            <call method="setContextVariable">
+                <argument>container</argument>
+                <argument type="service" id="service_container"/>
+            </call>
         </service>
 
-        <service id="symfony.expression.language" class="%symfony.expression.language.class%" />
+        <service id="bazinga_hateoas.expression_language" class="%bazinga_hateoas.expression_language.class%" />
 
         <!-- Serializers & Handlers -->
         <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false">
