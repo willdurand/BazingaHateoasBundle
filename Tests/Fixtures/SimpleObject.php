@@ -7,7 +7,11 @@ use JMS\Serializer\Annotation\Type;
 use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
- * @Hateoas\Relation("all", href="http://somewhere/simple-objects")
+ * @Hateoas\Relation(
+ *     "all",
+ *     href = "http://somewhere/simple-objects",
+ *     attributes = { "foo" = "expr(parameter('foo'))" }
+ * )
  */
 class SimpleObject
 {

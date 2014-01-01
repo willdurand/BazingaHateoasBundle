@@ -33,7 +33,10 @@ class BazingaHateoasExtensionTest extends TestCase
             json_encode(array(
                 'name' => 'hello',
                 '_links' => array(
-                    'all' => array('href' => 'http://somewhere/simple-objects'),
+                    'all' => array(
+                        'href' => 'http://somewhere/simple-objects',
+                        'foo'  => 'bar',
+                    ),
                 )
             )),
             $serializer->serialize(new SimpleObject('hello'), 'json')
@@ -95,6 +98,8 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->set('router', $router);
         $container->set('service_container', $container);
         $container->set('debug.stopwatch', $this->getMock('Symfony\Component\Stopwatch\Stopwatch'));
+
+        $container->setParameter('foo', 'bar');
 
         foreach ($extensions as $extension) {
             $container->registerExtension($extension);
