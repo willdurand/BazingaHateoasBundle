@@ -38,6 +38,7 @@ public function registerBundles()
 {
     return array(
         // ...
+        new JMS\SerializerBundle\JMSSerializerBundle(),
         new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
     );
 }
