@@ -27,7 +27,7 @@ class BazingaHateoasExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        foreach (array('serializer.xml', 'configuration.xml', 'generator.xml') as $file) {
+        foreach (array('serializer.xml', 'configuration.xml', 'generator.xml', 'helper.xml') as $file) {
             $loader->load($file);
         }
 

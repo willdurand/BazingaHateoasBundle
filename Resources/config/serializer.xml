@@ -10,8 +10,9 @@
         <parameter key="hateoas.embeds_factory.class">Hateoas\Factory\EmbeddedsFactory</parameter>
 
         <!-- Expressions -->
-        <parameter key="hateoas.expression.evaluator.class">Hateoas\Expression\ExpressionEvaluator</parameter>
+        <parameter key="hateoas.expression.evaluator.class">Bazinga\Bundle\HateoasBundle\Hateoas\Expression\LazyFunctionExpressionEvaluator</parameter>
         <parameter key="bazinga_hateoas.expression_language.class">Bazinga\Bundle\HateoasBundle\ExpressionLanguage\ExpressionLanguage</parameter>
+        <parameter key="hateoas.expression.link.class">Hateoas\Expression\LinkExpressionFunction</parameter>
 
         <!-- Serializers & Handlers -->
         <parameter key="hateoas.serializer.xml.class">Hateoas\Serializer\XmlSerializer</parameter>
@@ -49,6 +50,8 @@
         <!-- Expressions -->
         <service id="hateoas.expression.evaluator" class="%hateoas.expression.evaluator.class%">
             <argument type="service" id="bazinga_hateoas.expression_language" />
+            <argument type="collection"/>
+            <argument type="service" id="service_container" />
             <call method="setContextVariable">
                 <argument>container</argument>
                 <argument type="service" id="service_container"/>
@@ -56,6 +59,11 @@
         </service>
 
         <service id="bazinga_hateoas.expression_language" class="%bazinga_hateoas.expression_language.class%" />
+
+        <service id="hateoas.expression.link" class="%hateoas.expression.link.class%">
+            <argument type="service" id="hateoas.helper.link" />
+            <tag name="hateoas.expression_function"/>
+        </service>
 
         <!-- Serializers & Handlers -->
         <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false">
