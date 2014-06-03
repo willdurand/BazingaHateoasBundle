@@ -30,7 +30,7 @@ class UrlGeneratorPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('hateoas.url_generator') as $id => $attributes) {
             $name = !empty($attributes[0]['alias']) ? $attributes[0]['alias'] : $id;
 
-            if ($this->isSymfonyUrlGenerator($container->getDefinition($id))) {
+            if ($this->isSymfonyUrlGenerator($container, $container->getDefinition($id))) {
                 $definition = new Definition(
                     'Hateoas\UrlGenerator\SymfonyUrlGenerator',
                     array(new Reference($id))
@@ -49,9 +49,10 @@ class UrlGeneratorPass implements CompilerPassInterface
         }
     }
 
-    private function isSymfonyUrlGenerator(Definition $definition)
+    private function isSymfonyUrlGenerator(ContainerBuilder $container, Definition $definition)
     {
-        $refClass = new \ReflectionClass($definition->getClass());
+        $class = $container->getParameterBag()->resolveValue($definition->getClass());
+        $refClass = new \ReflectionClass($class);
 
         return $refClass->implementsInterface('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
     }
