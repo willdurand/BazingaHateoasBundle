@@ -3,6 +3,7 @@
 namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
+use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\UrlGeneratorPass;
 use Bazinga\Bundle\HateoasBundle\Tests\TestCase;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -10,6 +11,7 @@ use JMS\SerializerBundle\JMSSerializerBundle;
 use Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass;
 use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class BazingaHateoasExtensionTest extends TestCase
@@ -26,7 +28,9 @@ class BazingaHateoasExtensionTest extends TestCase
 
     public function testLoad()
     {
-        $container  = $this->getContainerForConfig(array(array()));
+        $container = $this->getContainerForConfig(array(array()));
+        $container->compile();
+
         $serializer = $container->get('serializer');
 
         $this->assertEquals(
@@ -41,6 +45,27 @@ class BazingaHateoasExtensionTest extends TestCase
             )),
             $serializer->serialize(new SimpleObject('hello'), 'json')
         );
+    }
+
+    public function testLoadUrlGenerator()
+    {
+        $container = $this->getContainerForConfig(array(array()));
+
+        $urlGeneratorClass = 'Bazinga\Bundle\HateoasBundle\Tests\Fixtures\UrlGenerator';
+        $container->setParameter('url_generator_2.class', $urlGeneratorClass);
+
+        $this->registerUrlGenerator($container, 'url_generator_1', $urlGeneratorClass);
+        $this->registerUrlGenerator($container, 'url_generator_2', '%url_generator_2.class%');
+
+        $container->compile();
+
+        $urlGeneratorRegistry = $container->get('hateoas.generator.registry');
+
+        $urlGenerator1 = $urlGeneratorRegistry->get('url_generator_1');
+        $this->assertInstanceOf($urlGeneratorClass, $urlGenerator1);
+
+        $urlGenerator2 = $urlGeneratorRegistry->get('url_generator_2');
+        $this->assertInstanceOf($urlGeneratorClass, $urlGenerator2);
     }
 
     private function clearTempDir()
@@ -113,10 +138,18 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->getCompilerPassConfig()->setOptimizationPasses(array(
             new ResolveParameterPlaceHoldersPass(),
             new ResolveDefinitionTemplatesPass(),
+            new UrlGeneratorPass(),
         ));
         $container->getCompilerPassConfig()->setRemovingPasses(array());
-        $container->compile();
 
         return $container;
+    }
+
+    private function registerUrlGenerator(ContainerBuilder $container, $id, $class)
+    {
+        $urlGeneratorDefinition = new Definition($class);
+        $urlGeneratorDefinition->addTag('hateoas.url_generator');
+
+        $container->setDefinition($id, $urlGeneratorDefinition);
     }
 }
