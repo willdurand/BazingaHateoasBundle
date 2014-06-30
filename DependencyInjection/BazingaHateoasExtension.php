@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 
 /**
@@ -51,5 +52,13 @@ class BazingaHateoasExtension extends Extension
                 new Alias($config['metadata']['cache'], false)
             );
         }
+
+        $container
+            ->getDefinition('hateoas.event_subscriber.json')
+            ->replaceArgument(0, new Reference($config['serializer']['json']));
+
+        $container
+            ->getDefinition('hateoas.event_subscriber.xml')
+            ->replaceArgument(0, new Reference($config['serializer']['xml']));
     }
 }
