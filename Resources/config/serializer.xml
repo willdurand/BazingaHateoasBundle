@@ -72,14 +72,14 @@
         <!-- Subscribers -->
         <service id="hateoas.event_subscriber.xml" class="%hateoas.event_subscriber.xml.class%">
             <tag name="jms_serializer.event_subscriber" />
-            <argument type="service" id="hateoas.serializer.xml" />
+            <argument /> <!-- xml serializer -->
             <argument type="service" id="hateoas.links_factory" />
             <argument type="service" id="hateoas.embeds_factory" />
         </service>
 
         <service id="hateoas.event_subscriber.json" class="%hateoas.event_subscriber.json.class%">
             <tag name="jms_serializer.event_subscriber" />
-            <argument type="service" id="hateoas.serializer.json_hal" />
+            <argument /> <!-- json serializer -->
             <argument type="service" id="hateoas.links_factory" />
             <argument type="service" id="hateoas.embeds_factory" />
             <argument type="service" id="hateoas.inline_deferrer.embeds" />

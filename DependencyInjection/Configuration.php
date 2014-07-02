@@ -42,6 +42,13 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
+            ->arrayNode('serializer')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('json')->defaultValue('hateoas.serializer.json_hal')->end()
+                    ->scalarNode('xml')->defaultValue('hateoas.serializer.xml')->end()
+                ->end()
+            ->end()
         ;
 
         return $treeBuilder;

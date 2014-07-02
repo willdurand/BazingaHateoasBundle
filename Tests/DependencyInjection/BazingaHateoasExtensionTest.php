@@ -68,6 +68,30 @@ class BazingaHateoasExtensionTest extends TestCase
         $this->assertInstanceOf($urlGeneratorClass, $urlGenerator2);
     }
 
+    public function testLoadSerializer()
+    {
+        $class = 'Bazinga\Bundle\HateoasBundle\Tests\Fixtures\JsonSerializer';
+        $container = $this->getContainerForConfig(array('bazinga_hateoas' => array('serializer' => array('json' => 'custom_serializer'))));
+        $container->setDefinition('custom_serializer', new Definition($class));
+        $container->compile();
+
+        $jsonListener = $container->get('hateoas.event_subscriber.json');
+
+        $reflClass = new \ReflectionClass($jsonListener);
+        $reflProp = $reflClass->getProperty('jsonSerializer');
+        $reflProp->setAccessible(true);
+
+        $this->assertInstanceOf($class, $reflProp->getValue($jsonListener));
+
+        $xmlListener = $container->get('hateoas.event_subscriber.xml');
+
+        $reflClass = new \ReflectionClass($xmlListener);
+        $reflProp = $reflClass->getProperty('xmlSerializer');
+        $reflProp->setAccessible(true);
+
+        $this->assertInstanceOf('Hateoas\Serializer\XmlSerializer', $reflProp->getValue($xmlListener));
+    }
+
     private function clearTempDir()
     {
         // clear temporary directory
@@ -127,8 +151,10 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('foo', 'bar');
 
         foreach ($extensions as $extension) {
+            $extensionConfig = isset($configs[$extension->getAlias()]) ? $configs[$extension->getAlias()] : array();
+
             $container->registerExtension($extension);
-            $extension->load($configs, $container);
+            $extension->load(array($extension->getAlias() => $extensionConfig), $container);
         }
 
         foreach ($bundles as $bundle) {
