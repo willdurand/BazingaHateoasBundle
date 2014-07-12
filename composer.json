@@ -16,7 +16,8 @@
         "jms/serializer-bundle": "~0.13"
     },
     "require-dev": {
-        "symfony/expression-language": "~2.4"
+        "symfony/expression-language": "~2.4",
+        "twig/twig": "~1.12"
     },
     "autoload": {
         "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
