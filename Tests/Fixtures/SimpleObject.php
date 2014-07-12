@@ -12,6 +12,10 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *     href = "http://somewhere/simple-objects",
  *     attributes = { "foo" = "expr(parameter('foo'))" }
  * )
+ * @Hateoas\Relation(
+ *     "all_2",
+ *     href = "expr(link(object, 'all'))"
+ * )
  */
 class SimpleObject
 {

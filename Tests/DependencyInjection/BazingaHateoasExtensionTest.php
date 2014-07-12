@@ -41,6 +41,9 @@ class BazingaHateoasExtensionTest extends TestCase
                         'href' => 'http://somewhere/simple-objects',
                         'foo'  => 'bar',
                     ),
+                    'all_2' => array(
+                        'href' => 'http://somewhere/simple-objects',
+                    ),
                 )
             )),
             $serializer->serialize(new SimpleObject('hello'), 'json')
@@ -90,6 +93,23 @@ class BazingaHateoasExtensionTest extends TestCase
         $reflProp->setAccessible(true);
 
         $this->assertInstanceOf('Hateoas\Serializer\XmlSerializer', $reflProp->getValue($xmlListener));
+    }
+
+    /**
+     * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Service invalid_expression_function tagged with hateoas.expression_function must implement Hateoas\Expression\ExpressionFunctionInterface
+     */
+    public function testLoadInvalidExpressionFunction()
+    {
+        $container = $this->getContainerForConfig(array(array()));
+        $container
+            ->setDefinition(
+                'invalid_expression_function',
+                new Definition('stdClass')
+            )
+            ->addTag('hateoas.expression_function')
+        ;
+        $container->compile();
     }
 
     private function clearTempDir()
