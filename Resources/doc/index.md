@@ -44,6 +44,61 @@ public function registerBundles()
 }
 ```
 
+Expression Language
+-------------------
+
+This bundle provides three extra functions to the expression language:
+
+## `is_granted`
+
+Allows you to exclude certain routes by checking whether the currently authenticated user
+has certain permissions or not. For example:
+
+```php
+/**
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "post_delete",
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(
+ *          excludeIf = "expr(not is_granted(['ROLE_ADMIN'])"
+ *      )
+ * )
+ */
+class Post
+{
+    // ...
+}
+```
+
+If the authenticated user has the `ROLE_ADMIN` role the route will be exposed, otherwise
+the route will be excluded.
+
+## `parameter`
+
+Allows you to fetch a parameter from the service container:
+
+```
+/**
+ * @Hateoas\Relation(
+ *      "delete",
+ *      href = @Hateoas\Route(
+ *          "post_delete",
+ *          parameters = { "foo" = "expr(parameter('foo'))" }
+ *      )
+ * )
+ */
+class Post
+{
+    // ...
+}
+```
+
+## `service`
+
+Allows you to fetch a service from the service container.
 
 Reference Configuration
 -----------------------
