@@ -10,39 +10,64 @@ Usage
 Basically, this bundle does not need anything. You should look at the [Hateoas
 documentation](http://github.com/willdurand/Hateoas) for more information.
 
-
 Installation
 ------------
 
-Require [`willdurand/hateoas-bundle`](https://packagist.org/packages/willdurand/hateoas-bundle)
-into your `composer.json` file:
+### Step 1: Download the Bundle
 
+Open a command console, enter your project directory and execute the
+following command to download the latest stable version of this bundle:
 
-``` json
+```bash
+$ composer require willdurand/hateoas-bundle
+```
+
+This command requires you to have Composer installed globally, as explained
+in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
+of the Composer documentation.
+
+### Step 2: Enable the Bundle
+
+Then, enable the bundle by adding the following line in the `app/AppKernel.php`
+file of your project:
+
+```php
+<?php
+// app/AppKernel.php
+
+// ...
+class AppKernel extends Kernel
 {
-    "require": {
-        "willdurand/hateoas-bundle": "@stable"
+    public function registerBundles()
+    {
+        $bundles = array(
+            // ...
+            new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
+        );
+        
+        // ...
     }
 }
 ```
 
-**Protip:** you should browse the
-[`willdurand/hateoas-bundle`](https://packagist.org/packages/willdurand/hateoas-bundle)
-page to choose a stable version to use, avoid the `@stable` meta constraint.
-
-Register the bundle in `app/AppKernel.php`:
-
-``` php
-// app/AppKernel.php
-public function registerBundles()
-{
-    return array(
-        // ...
-        new JMS\SerializerBundle\JMSSerializerBundle(),
-        new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
-    );
-}
-```
+ > **Note:**
+ > The bundle requires the [JMSSerializerBundle](http://jmsyst.com/bundles/JMSSerializerBundle) to be
+ > registered. If you haven't done that already, you should register it in the kernel aswell:
+ >
+ > ```php
+ > // app/AppKernel.php
+ > 
+ > // ...
+ > public function registerBundles()
+ > {
+ >     $bundles = array(
+ >         // ...
+ >         new JMS\SerializerBundle\JMSSerializerBundle(),
+ >     );
+ >
+ >     // ...
+ > }
+ > ```
 
 Expression Language
 -------------------
