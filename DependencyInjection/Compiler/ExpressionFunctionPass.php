@@ -51,4 +51,4 @@ class ExpressionFunctionPass implements CompilerPassInterface
 
         return $refClass->implementsInterface('Hateoas\Expression\ExpressionFunctionInterface');
     }
-} 
+}
