@@ -17,17 +17,20 @@
 
     <services>
         <service id="hateoas.configuration.provider.resolver.chain" class="%hateoas.configuration.provider.resolver.chain.class%" public="false">
-            <argument type="collection">
-                <argument type="service" id="hateoas.configuration.provider.resolver.method" />
-                <argument type="service" id="hateoas.configuration.provider.resolver.static_method" />
-                <argument type="service" id="hateoas.configuration.provider.resolver.symfony_container" />
-            </argument>
+            <argument type="collection"></argument>
         </service>
 
-        <service id="hateoas.configuration.provider.resolver.method" class="%hateoas.configuration.provider.resolver.method.class%" public="false"/>
-        <service id="hateoas.configuration.provider.resolver.static_method" class="%hateoas.configuration.provider.resolver.static_method.class%" public="false"/>
+        <service id="hateoas.configuration.provider.resolver.method" class="%hateoas.configuration.provider.resolver.method.class%" public="false">
+            <tag name="hateoas.relation_provider" />
+        </service>
+
+        <service id="hateoas.configuration.provider.resolver.static_method" class="%hateoas.configuration.provider.resolver.static_method.class%" public="false">
+            <tag name="hateoas.relation_provider" />
+        </service>
+
         <service id="hateoas.configuration.provider.resolver.symfony_container" class="%hateoas.configuration.provider.resolver.symfony_container.class%" public="false">
             <argument type="service" id="service_container"/>
+            <tag name="hateoas.relation_provider" />
         </service>
 
         <service id="hateoas.configuration.provider.resolver" alias="hateoas.configuration.provider.resolver.chain"/>
