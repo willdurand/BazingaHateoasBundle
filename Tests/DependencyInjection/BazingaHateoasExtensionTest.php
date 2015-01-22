@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPas
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\RelationProviderPass;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 class BazingaHateoasExtensionTest extends TestCase
 {
@@ -48,6 +50,29 @@ class BazingaHateoasExtensionTest extends TestCase
             )),
             $serializer->serialize(new SimpleObject('hello'), 'json')
         );
+    }
+
+    public function testRelationProviderPassInvalidProvider()
+    {
+        $container = $this->getContainerForConfig(array(array()));
+        $container->addCompilerPass(new RelationProviderPass());
+        $container->compile();
+        $definition = $container->getDefinition('hateoas.configuration.provider.resolver.chain');
+        $arguments = $definition->getArguments();
+        $this->assertCount(1, $arguments);
+        $this->assertCount(3, $arguments[0]);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testRelationProviderPass()
+    {
+        $container = $this->getContainerForConfig(array(array()));
+        $definition = $container->register('invalid_relation_provider', 'stdClass');
+        $definition->addTag('hateoas.relation_provider');
+        $container->addCompilerPass(new RelationProviderPass());
+        $container->compile();
     }
 
     public function testLoadUrlGenerator()
