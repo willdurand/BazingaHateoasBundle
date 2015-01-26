@@ -55,7 +55,6 @@ class BazingaHateoasExtensionTest extends TestCase
     public function testRelationProviderPassInvalidProvider()
     {
         $container = $this->getContainerForConfig(array(array()));
-        $container->addCompilerPass(new RelationProviderPass());
         $container->compile();
         $definition = $container->getDefinition('hateoas.configuration.provider.resolver.chain');
         $arguments = $definition->getArguments();
@@ -71,7 +70,6 @@ class BazingaHateoasExtensionTest extends TestCase
         $container = $this->getContainerForConfig(array(array()));
         $definition = $container->register('invalid_relation_provider', 'stdClass');
         $definition->addTag('hateoas.relation_provider');
-        $container->addCompilerPass(new RelationProviderPass());
         $container->compile();
     }
 

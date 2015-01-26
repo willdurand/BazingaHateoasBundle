@@ -11,6 +11,7 @@
 namespace Bazinga\Bundle\HateoasBundle;
 
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\ExpressionFunctionPass;
+use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\RelationProviderPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\UrlGeneratorPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -26,5 +27,6 @@ class BazingaHateoasBundle extends Bundle
 
         $container->addCompilerPass(new UrlGeneratorPass());
         $container->addCompilerPass(new ExpressionFunctionPass());
+        $container->addCompilerPass(new RelationProviderPass());
     }
 }
