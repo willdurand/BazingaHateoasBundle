@@ -86,7 +86,7 @@ class SomeController extends Controller
         $post = $repository->find('BlogBundle:post');
         $json = $this->container->get('serializer')->serialize($post, 'json');
 
-        return new Response($json, 200, 'application/json');
+        return new Response($json, 200, array('application/json'));
     }
 }
 ````
