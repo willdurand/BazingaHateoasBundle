@@ -15,8 +15,6 @@ class LazyFunctionExpressionEvaluator extends ExpressionEvaluator
 
     private $functionsIds = array();
 
-    private $functionsRegistered = false;
-
     public function __construct(
         ExpressionLanguage $expressionLanguage,
         array $context = array(),
@@ -29,14 +27,18 @@ class LazyFunctionExpressionEvaluator extends ExpressionEvaluator
 
     public function evaluate($expression, $data)
     {
-        $this->registerFunctions();
+        if (!empty($this->functionsIds)) {
+            $this->registerFunctions();
+        }
 
         return parent::evaluate($expression, $data);
     }
 
     public function evaluateArray(array $array, $data)
     {
-        $this->registerFunctions();
+        if (!empty($this->functionsIds)) {
+            $this->registerFunctions();
+        }
 
         return parent::evaluateArray($array, $data);
     }
