@@ -17,7 +17,8 @@
     },
     "require-dev": {
         "symfony/expression-language": "~2.4 || ~3.0",
-        "twig/twig": "~1.12"
+        "twig/twig": "~1.12",
+        "phpunit/phpunit": "~4.5"
     },
     "autoload": {
         "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
