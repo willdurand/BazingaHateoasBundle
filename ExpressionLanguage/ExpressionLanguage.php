@@ -31,10 +31,10 @@ class ExpressionLanguage extends BaseExpressionLanguage
         });
 
         $this->register('is_granted', function ($attribute, $object = null) {
-            return sprintf('call_user_func_array(array($this->get(security.context), isGranted), array(%s, %s))', $attribute, $object);
+            return sprintf('call_user_func_array(array($this->get(security.authorization_checker), isGranted), array(%s, %s))', $attribute, $object);
         }, function (array $variables, $attribute, $object = null) {
             return call_user_func_array(
-                array($variables['container']->get('security.context'), 'isGranted'),
+                array($variables['container']->get('security.authorization_checker'), 'isGranted'),
                 [$attribute, $object]
             );
         });
