@@ -135,6 +135,23 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->compile();
     }
 
+    /**
+     * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Service invalid_configuration_extension tagged with hateoas.configuration_extension must implement Hateoas\Configuration\Metadata\ConfigurationExtensionInterface
+     */
+    public function testLoadInvalidConfigurationExtension()
+    {
+        $container = $this->getContainerForConfig(array(array()));
+        $container
+            ->setDefinition(
+                'invalid_configuration_extension',
+                new Definition('stdClass')
+            )
+            ->addTag('hateoas.configuration_extension')
+        ;
+        $container->compile();
+    }
+
     private function clearTempDir()
     {
         // clear temporary directory
