@@ -176,6 +176,57 @@ with the tag `hateoas.relation_provider`:
 </container>
 ````
 
+### Configuration Extension
+
+A configuration extension allows you to override already configured relations.
+
+You can add an extension configuration by adding a definition to the dependency
+injection configuration with the tag `hateoas.configuration_extension`:
+
+```xml
+<?xml version="1.0" ?>
+<container ...>
+
+    <!-- ... -->
+
+    <services>
+        <!-- ... -->
+
+        <service id="acme_foo.hateoas.configuration_extension.foobar" class="Acme\FooBundle\Hateoas\ConfigurationExtension\AcmeFooConfigurationExtension">
+            <tag name="hateoas.configuration_extension" />
+        </service>
+    </services>
+</container>
+```
+
+```php
+<?php
+namespace Acme\FooBundle\Hateoas\ConfigurationExtension;
+
+use Hateoas\Configuration\Metadata\ConfigurationExtensionInterface;
+use Hateoas\Configuration\Metadata\ClassMetadataInterface;
+use Hateoas\Configuration\Relation;
+
+class AcmeFooConfigurationExtension implements ConfigurationExtensionInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function decorate(ClassMetadataInterface $classMetadata)
+    {
+        if (0 === strpos('Acme\Foo\Model', $classMetadata->getName())) {
+            // Add a "root" relation to all classes in the `Acme\Foo\Model` namespace
+            $classMetadata->addRelation(
+                new Relation(
+                    'root',
+                    '/'
+                )
+            );
+        }
+    }
+}
+```
+
 Reference Configuration
 -----------------------
 
