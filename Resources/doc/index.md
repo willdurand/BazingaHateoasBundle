@@ -102,6 +102,8 @@ Allows you to exclude certain routes by checking whether the currently authentic
 has certain permissions or not. For example:
 
 ```php
+use Hateoas\Configuration\Annotation as Hateoas;
+
 /**
  * @Hateoas\Relation(
  *      "delete",
