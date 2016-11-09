@@ -10,7 +10,6 @@
 
 namespace Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler;
 
-use Hateoas\Configuration\Metadata\ConfigurationExtensionInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -33,7 +32,7 @@ class ExtensionDriverPass implements CompilerPassInterface
                     sprintf(
                         'Service %s tagged with hateoas.configuration_extension must implement %s',
                         $id,
-                        ConfigurationExtensionInterface::class
+                        'Hateoas\Configuration\Metadata\ConfigurationExtensionInterface'
                     )
                 );
             }
@@ -47,6 +46,6 @@ class ExtensionDriverPass implements CompilerPassInterface
         $class = $container->getParameterBag()->resolveValue($definition->getClass());
         $refClass = new \ReflectionClass($class);
 
-        return $refClass->implementsInterface(ConfigurationExtensionInterface::class);
+        return $refClass->implementsInterface('Hateoas\Configuration\Metadata\ConfigurationExtensionInterface');
     }
 }
