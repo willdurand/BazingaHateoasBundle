@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": ">5.4",
-        "symfony/framework-bundle": "~2.2 || ~3.0",
+        "symfony/framework-bundle": "~2.3 || ~3.0",
         "willdurand/hateoas": "^2.10.0",
         "jms/serializer-bundle": "~1.0 || ^2.0"
     },

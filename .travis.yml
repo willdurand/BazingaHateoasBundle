@@ -16,13 +16,11 @@ php:
     - hhvm
 
 env:
-    - SYMFONY_VERSION=2.2.*
     - SYMFONY_VERSION=2.3.*
     - SYMFONY_VERSION=2.4.*
     - SYMFONY_VERSION=2.8.*
     - SYMFONY_VERSION=3.0.*
     - SYMFONY_VERSION=3.2.*
-    - SYMFONY_VERSION=2.2.* DEPS=low
     - SYMFONY_VERSION=2.3.* DEPS=low
     - SYMFONY_VERSION=2.4.* DEPS=low
     - SYMFONY_VERSION=2.8.* DEPS=low
