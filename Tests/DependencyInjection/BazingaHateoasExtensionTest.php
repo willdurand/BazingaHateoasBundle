@@ -205,7 +205,6 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.bundles', array());
         $container->set('annotation_reader', new AnnotationReader());
         $container->set('router', $router);
-        $container->set('service_container', $container);
         $container->set('debug.stopwatch', $this->getMock('Symfony\Component\Stopwatch\Stopwatch'));
 
         $container->setParameter('foo', 'bar');
