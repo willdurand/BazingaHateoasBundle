@@ -33,7 +33,7 @@ class BazingaHateoasExtensionTest extends TestCase
         $container = $this->getContainerForConfig(array(array()));
         $container->compile();
 
-        $serializer = $container->get('serializer');
+        $serializer = $container->get('jms_serializer');
 
         $this->assertEquals(
             json_encode(array(
