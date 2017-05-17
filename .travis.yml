@@ -29,10 +29,6 @@ env:
     - SYMFONY_VERSION=3.0.* DEPS=low
     - SYMFONY_VERSION=3.2.* DEPS=low
 
-matrix:
-    allow_failures:
-        - php: hhvm
-
 before_script:
     - if [ "$DEPS" = 'low' ] ; then COMPOSER_PARAMS="--prefer-lowest --prefer-stable" ;  fi
     - composer self-update
