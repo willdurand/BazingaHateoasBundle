@@ -33,7 +33,7 @@ class BazingaHateoasExtensionTest extends TestCase
         $container = $this->getContainerForConfig(array(array()));
         $container->compile();
 
-        $serializer = $container->get('serializer');
+        $serializer = $container->get('jms_serializer');
 
         $this->assertEquals(
             json_encode(array(
@@ -205,7 +205,6 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.bundles', array());
         $container->set('annotation_reader', new AnnotationReader());
         $container->set('router', $router);
-        $container->set('service_container', $container);
         $container->set('debug.stopwatch', $this->getMock('Symfony\Component\Stopwatch\Stopwatch'));
 
         $container->setParameter('foo', 'bar');
