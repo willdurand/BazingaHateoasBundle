@@ -22,9 +22,8 @@
         "phpunit/phpunit": "~4.5"
     },
     "autoload": {
-        "psr-0": { "Bazinga\\Bundle\\HateoasBundle": "" }
+        "psr-4": { "Bazinga\\Bundle\\HateoasBundle\\": "" }
     },
-    "target-dir": "Bazinga/Bundle/HateoasBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.2-dev"
