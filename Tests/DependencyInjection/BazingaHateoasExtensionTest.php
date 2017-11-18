@@ -9,12 +9,13 @@ use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass;
-use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\RelationProviderPass;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class BazingaHateoasExtensionTest extends TestCase
 {
@@ -181,7 +182,7 @@ class BazingaHateoasExtensionTest extends TestCase
     private function getContainerForConfig(array $configs, KernelInterface $kernel = null)
     {
         if (null === $kernel) {
-            $kernel = $this->getMock('Symfony\Component\HttpKernel\KernelInterface');
+            $kernel = $this->getMock(KernelInterface::class);
             $kernel
                 ->expects($this->any())
                 ->method('getBundles')
@@ -189,7 +190,7 @@ class BazingaHateoasExtensionTest extends TestCase
                 ;
         }
 
-        $router  = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $router  = $this->getMock(UrlGeneratorInterface::class);
         $bundles = array(
             new BazingaHateoasBundle($kernel),
             new JMSSerializerBundle($kernel),
@@ -205,7 +206,7 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.bundles', array());
         $container->set('annotation_reader', new AnnotationReader());
         $container->set('router', $router);
-        $container->set('debug.stopwatch', $this->getMock('Symfony\Component\Stopwatch\Stopwatch'));
+        $container->set('debug.stopwatch', $this->getMock(Stopwatch::class));
 
         $container->setParameter('foo', 'bar');
 
@@ -220,11 +221,7 @@ class BazingaHateoasExtensionTest extends TestCase
             $bundle->build($container);
         }
 
-        $container->getCompilerPassConfig()->setOptimizationPasses(array(
-            new ResolveParameterPlaceHoldersPass(),
-            new ResolveDefinitionTemplatesPass(),
-            new UrlGeneratorPass(),
-        ));
+        $this->setOptimizationPasses($container);
         $container->getCompilerPassConfig()->setRemovingPasses(array());
 
         return $container;
@@ -236,5 +233,29 @@ class BazingaHateoasExtensionTest extends TestCase
         $urlGeneratorDefinition->addTag('hateoas.url_generator');
 
         $container->setDefinition($id, $urlGeneratorDefinition);
+    }
+
+    /**
+     * @param $container
+     */
+    private function setOptimizationPasses(Container $container)
+    {
+        if (class_exists('Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass')) {
+            $container->getCompilerPassConfig()->setOptimizationPasses(
+                array(
+                    new ResolveParameterPlaceHoldersPass(),
+                    new \Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass(),
+                    new UrlGeneratorPass(),
+                )
+            );
+        } else {
+            $container->getCompilerPassConfig()->setOptimizationPasses(
+                array(
+                    new ResolveParameterPlaceHoldersPass(),
+                    new \Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass(),
+                    new UrlGeneratorPass(),
+                )
+            );
+        }
     }
 }
