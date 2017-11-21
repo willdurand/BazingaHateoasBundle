@@ -84,9 +84,9 @@ class SomeController extends Controller
     public function resourceAction(Request $request)
     {
         $post = $repository->find('BlogBundle:post');
-        $json = $this->container->get('serializer')->serialize($post, 'json');
+        $json = $this->container->get('jms_serializer')->serialize($post, 'json');
 
-        return new Response($json, 200, array('application/json'));
+        return new Response($json, 200, array('Content-Type' => 'application/json'));
     }
 }
 ````
