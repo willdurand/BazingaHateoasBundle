@@ -2,7 +2,7 @@ BazingaHateoasBundle
 ====================
 
 This bundle integrates [Hateoas](http://github.com/willdurand/Hateoas) into
-[Symfony2](http://symfony.com).
+[Symfony](http://symfony.com).
 
 Installation
 ------------
