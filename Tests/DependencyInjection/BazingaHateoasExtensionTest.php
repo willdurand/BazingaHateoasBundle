@@ -121,6 +121,16 @@ class BazingaHateoasExtensionTest extends TestCase
 
     /**
      * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     */
+    public function testNotLoadingTwigHelper()
+    {
+        $container = $this->getContainerForConfig(array('bazinga_hateoas' => array('twig_extension' => array('enabled' => false))));
+        $container->findDefinition('hateoas.twig.link');
+        $container->compile();
+    }
+
+    /**
+     * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      * @expectedExceptionMessage Service invalid_expression_function tagged with hateoas.expression_function must implement Hateoas\Expression\ExpressionFunctionInterface
      */
     public function testLoadInvalidExpressionFunction()

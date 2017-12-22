@@ -240,6 +240,11 @@ bazinga_hateoas:
         cache:                file
         file_cache:
             dir:              %kernel.cache_dir%/hateoas
+    serializer:
+        json: hateoas.serializer.json_hal
+        xml: hateoas.serializer.xml
+    twig_extension:
+        enabled: true
 ```
 
 
