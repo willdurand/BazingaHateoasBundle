@@ -60,7 +60,7 @@
 
         <service id="bazinga_hateoas.expression_language" class="%bazinga_hateoas.expression_language.class%" />
 
-        <service id="hateoas.expression.link" class="%hateoas.expression.link.class%">
+        <service id="hateoas.expression.link" class="%hateoas.expression.link.class%" public="true">
             <argument type="service" id="hateoas.helper.link" />
             <tag name="hateoas.expression_function"/>
         </service>
