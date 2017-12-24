@@ -55,12 +55,12 @@ class BazingaHateoasExtension extends Extension
 
         $container
             ->getDefinition('hateoas.event_subscriber.json')
-            ->setPublic()
+            ->setPublic(true)
             ->replaceArgument(0, new Reference($config['serializer']['json']));
 
         $container
             ->getDefinition('hateoas.event_subscriber.xml')
-            ->setPublic()
+            ->setPublic(true)
             ->replaceArgument(0, new Reference($config['serializer']['xml']));
     }
 }
