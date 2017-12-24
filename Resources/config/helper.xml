@@ -8,7 +8,7 @@
     </parameters>
 
     <services>
-        <service id="hateoas.helper.link" class="%hateoas.helper.link.class%">
+        <service id="hateoas.helper.link" class="%hateoas.helper.link.class%" public="true">
             <argument type="service" id="hateoas.link_factory" />
             <argument type="service" id="hateoas.configuration.relations_repository" />
         </service>
