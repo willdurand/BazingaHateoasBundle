@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="hateoas.generator.registry" class="%hateoas.generator.registry.class%">
+        <service id="hateoas.generator.registry" class="%hateoas.generator.registry.class%" public="true">
             <argument type="service" id="hateoas.generator.symfony" />
         </service>
 
