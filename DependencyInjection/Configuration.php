@@ -49,6 +49,10 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('xml')->defaultValue('hateoas.serializer.xml')->end()
                 ->end()
             ->end()
+            ->arrayNode('twig_extension')
+                ->addDefaultsIfNotSet()
+                ->canBeDisabled()
+            ->end()
         ;
 
         return $treeBuilder;

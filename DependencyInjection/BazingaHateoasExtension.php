@@ -28,6 +28,10 @@ class BazingaHateoasExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         foreach (array('serializer', 'configuration', 'generator', 'helper', 'twig') as $file) {
+            if ('twig' === $file && false === $config['twig_extension']['enabled']) {
+                continue;
+            }
+
             $loader->load($file . '.xml');
         }
 
