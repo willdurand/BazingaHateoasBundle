@@ -154,10 +154,9 @@ Allows you to fetch a service from the service container.
 Extending
 ---------
 
-### RelationProviderResolver
+### RelationProvider
 
-A relation provider resolver is a class which provides a PHP callable. This
-callable will provide relations (links) for a given object.
+A relation provider provide relations (links) for a given class.
 
 You can add new relation providers by implementing the 
 `Hateoas\Configuration\Provider\RelationProviderInterface`
