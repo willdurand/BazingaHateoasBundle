@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the HateoasBundle package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @license    MIT License
  */
 
 namespace Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler;
@@ -41,7 +41,7 @@ class ExtensionDriverPass implements CompilerPassInterface
         }
     }
 
-    private function implementsConfigurationExtensionInterface(ContainerBuilder $container, Definition $definition)
+    private function implementsConfigurationExtensionInterface(ContainerBuilder $container, Definition $definition): bool
     {
         $class = $container->getParameterBag()->resolveValue($definition->getClass());
         $refClass = new \ReflectionClass($class);

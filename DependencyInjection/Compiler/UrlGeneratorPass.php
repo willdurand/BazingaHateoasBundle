@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the HateoasBundle package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @license    MIT License
  */
 
 namespace Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler;
@@ -15,9 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * @author Adrien Brault <adrien.brault@gmail.com>
- */
 class UrlGeneratorPass implements CompilerPassInterface
 {
     /**
@@ -33,7 +30,7 @@ class UrlGeneratorPass implements CompilerPassInterface
             if ($this->isSymfonyUrlGenerator($container, $container->getDefinition($id))) {
                 $definition = new Definition(
                     'Hateoas\UrlGenerator\SymfonyUrlGenerator',
-                    array(new Reference($id))
+                    [new Reference($id)]
                 );
                 $definition->setPublic(false);
 
@@ -44,12 +41,12 @@ class UrlGeneratorPass implements CompilerPassInterface
 
             $registryDefinition->addMethodCall(
                 'set',
-                array($name, new Reference($id))
+                [$name, new Reference($id)]
             );
         }
     }
 
-    private function isSymfonyUrlGenerator(ContainerBuilder $container, Definition $definition)
+    private function isSymfonyUrlGenerator(ContainerBuilder $container, Definition $definition): bool
     {
         $class = $container->getParameterBag()->resolveValue($definition->getClass());
         $refClass = new \ReflectionClass($class);

@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the HateoasBundle package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @license    MIT License
  */
 
 namespace Bazinga\Bundle\HateoasBundle\DependencyInjection;
@@ -13,9 +13,6 @@ namespace Bazinga\Bundle\HateoasBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * @author William Durand <william.durand1@gmail.com>
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -23,7 +20,7 @@ class Configuration implements ConfigurationInterface
      *
      * @return TreeBuilder The tree builder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
         $rootNode    = $treeBuilder->root('bazinga_hateoas');
@@ -52,8 +49,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('twig_extension')
                 ->addDefaultsIfNotSet()
                 ->canBeDisabled()
-            ->end()
-        ;
+            ->end();
 
         return $treeBuilder;
     }

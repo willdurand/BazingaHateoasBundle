@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bazinga\Bundle\HateoasBundle\Tests\Fixtures;
 
 use Hateoas\Serializer\JsonSerializerInterface;

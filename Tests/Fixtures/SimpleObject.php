@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bazinga\Bundle\HateoasBundle\Tests\Fixtures;
 
+use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
-use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @Hateoas\Relation(

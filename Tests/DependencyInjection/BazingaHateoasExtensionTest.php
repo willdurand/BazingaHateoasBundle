@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
@@ -8,12 +10,14 @@ use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass;
+use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
 use Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -31,31 +35,29 @@ class BazingaHateoasExtensionTest extends TestCase
 
     public function testLoad()
     {
-        $container = $this->getContainerForConfig(array(array()));
+        $container = $this->getContainerForConfig([[]]);
         $container->compile();
 
         $serializer = $container->get('jms_serializer');
 
         $this->assertEquals(
-            json_encode(array(
+            json_encode([
                 'name' => 'hello',
-                '_links' => array(
-                    'all' => array(
+                '_links' => [
+                    'all' => [
                         'href' => 'http://somewhere/simple-objects',
                         'foo'  => 'bar',
-                    ),
-                    'all_2' => array(
-                        'href' => 'http://somewhere/simple-objects',
-                    ),
-                )
-            )),
+                    ],
+                    'all_2' => ['href' => 'http://somewhere/simple-objects'],
+                ],
+            ]),
             $serializer->serialize(new SimpleObject('hello'), 'json')
         );
     }
 
     public function testRelationProviderPassInvalidProvider()
     {
-        $container = $this->getContainerForConfig(array(array()));
+        $container = $this->getContainerForConfig([[]]);
         $container->compile();
         $definition = $container->getDefinition('hateoas.configuration.provider.chain');
         $arguments = $definition->getArguments();
@@ -68,7 +70,7 @@ class BazingaHateoasExtensionTest extends TestCase
      */
     public function testRelationProviderPass()
     {
-        $container = $this->getContainerForConfig(array(array()));
+        $container = $this->getContainerForConfig([[]]);
         $definition = $container->register('invalid_relation_provider', 'stdClass');
         $definition->addTag('hateoas.relation_provider');
         $container->compile();
@@ -76,7 +78,7 @@ class BazingaHateoasExtensionTest extends TestCase
 
     public function testLoadUrlGenerator()
     {
-        $container = $this->getContainerForConfig(array(array()));
+        $container = $this->getContainerForConfig([[]]);
 
         $urlGeneratorClass = 'Bazinga\Bundle\HateoasBundle\Tests\Fixtures\UrlGenerator';
         $container->setParameter('url_generator_2.class', $urlGeneratorClass);
@@ -98,7 +100,7 @@ class BazingaHateoasExtensionTest extends TestCase
     public function testLoadSerializer()
     {
         $class = 'Bazinga\Bundle\HateoasBundle\Tests\Fixtures\JsonSerializer';
-        $container = $this->getContainerForConfig(array('bazinga_hateoas' => array('serializer' => array('json' => 'custom_serializer'))));
+        $container = $this->getContainerForConfig(['bazinga_hateoas' => ['serializer' => ['json' => 'custom_serializer']]]);
         $container->setDefinition('custom_serializer', new Definition($class));
         $container->compile();
 
@@ -124,7 +126,7 @@ class BazingaHateoasExtensionTest extends TestCase
      */
     public function testNotLoadingTwigHelper()
     {
-        $container = $this->getContainerForConfig(array('bazinga_hateoas' => array('twig_extension' => array('enabled' => false))));
+        $container = $this->getContainerForConfig(['bazinga_hateoas' => ['twig_extension' => ['enabled' => false]]]);
         $container->findDefinition('hateoas.twig.link');
         $container->compile();
     }
@@ -135,14 +137,13 @@ class BazingaHateoasExtensionTest extends TestCase
      */
     public function testLoadInvalidConfigurationExtension()
     {
-        $container = $this->getContainerForConfig(array(array()));
+        $container = $this->getContainerForConfig([[]]);
         $container
             ->setDefinition(
                 'invalid_configuration_extension',
                 new Definition('stdClass')
             )
-            ->addTag('hateoas.configuration_extension')
-        ;
+            ->addTag('hateoas.configuration_extension');
         $container->compile();
     }
 
@@ -172,22 +173,21 @@ class BazingaHateoasExtensionTest extends TestCase
     /**
      * @see https://github.com/schmittjoh/JMSSerializerBundle/blob/master/Tests/DependencyInjection/JMSSerializerExtensionTest.php
      */
-    private function getContainerForConfig(array $configs, KernelInterface $kernel = null)
+    private function getContainerForConfig(array $configs, ?KernelInterface $kernel = null)
     {
         if (null === $kernel) {
             $kernel = $this->createMock(KernelInterface::class);
             $kernel
                 ->expects($this->any())
                 ->method('getBundles')
-                ->will($this->returnValue(array()))
-                ;
+                ->will($this->returnValue([]));
         }
 
         $router  = $this->createMock(UrlGeneratorInterface::class);
-        $bundles = array(
+        $bundles = [
             new BazingaHateoasBundle($kernel),
             new JMSSerializerBundle($kernel),
-        );
+        ];
 
         $extensions = array_map(function ($bundle) {
             return $bundle->getContainerExtension();
@@ -196,7 +196,7 @@ class BazingaHateoasExtensionTest extends TestCase
         $container = new ContainerBuilder();
         $container->setParameter('kernel.debug', true);
         $container->setParameter('kernel.cache_dir', $this->getTempDir());
-        $container->setParameter('kernel.bundles', array());
+        $container->setParameter('kernel.bundles', []);
         $container->set('annotation_reader', new AnnotationReader());
         $container->set('router', $router);
         $container->set('debug.stopwatch', $this->createMock(Stopwatch::class));
@@ -204,10 +204,10 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('foo', 'bar');
 
         foreach ($extensions as $extension) {
-            $extensionConfig = isset($configs[$extension->getAlias()]) ? $configs[$extension->getAlias()] : array();
+            $extensionConfig = $configs[$extension->getAlias()] ?? [];
 
             $container->registerExtension($extension);
-            $extension->load(array($extension->getAlias() => $extensionConfig), $container);
+            $extension->load([$extension->getAlias() => $extensionConfig], $container);
         }
 
         foreach ($bundles as $bundle) {
@@ -215,12 +215,12 @@ class BazingaHateoasExtensionTest extends TestCase
         }
 
         $this->setOptimizationPasses($container);
-        $container->getCompilerPassConfig()->setRemovingPasses(array());
+        $container->getCompilerPassConfig()->setRemovingPasses([]);
 
         return $container;
     }
 
-    private function registerUrlGenerator(ContainerBuilder $container, $id, $class)
+    private function registerUrlGenerator(ContainerBuilder $container, string $id, string $class)
     {
         $urlGeneratorDefinition = new Definition($class);
         $urlGeneratorDefinition->addTag('hateoas.url_generator');
@@ -228,26 +228,23 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setDefinition($id, $urlGeneratorDefinition);
     }
 
-    /**
-     * @param $container
-     */
     private function setOptimizationPasses(Container $container)
     {
         if (class_exists('Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass')) {
             $container->getCompilerPassConfig()->setOptimizationPasses(
-                array(
+                [
                     new ResolveParameterPlaceHoldersPass(),
-                    new \Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass(),
+                    new ResolveDefinitionTemplatesPass(),
                     new UrlGeneratorPass(),
-                )
+                ]
             );
         } else {
             $container->getCompilerPassConfig()->setOptimizationPasses(
-                array(
+                [
                     new ResolveParameterPlaceHoldersPass(),
-                    new \Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass(),
+                    new ResolveChildDefinitionsPass(),
                     new UrlGeneratorPass(),
-                )
+                ]
             );
         }
     }

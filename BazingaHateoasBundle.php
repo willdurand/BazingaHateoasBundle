@@ -10,7 +10,6 @@
 
 namespace Bazinga\Bundle\HateoasBundle;
 
-use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\ExpressionFunctionPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\ExtensionDriverPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\RelationProviderPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\UrlGeneratorPass;
