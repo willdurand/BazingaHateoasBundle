@@ -4,10 +4,10 @@ namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\UrlGeneratorPass;
-use Bazinga\Bundle\HateoasBundle\Tests\TestCase;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -57,7 +57,7 @@ class BazingaHateoasExtensionTest extends TestCase
     {
         $container = $this->getContainerForConfig(array(array()));
         $container->compile();
-        $definition = $container->getDefinition('hateoas.configuration.provider.resolver.chain');
+        $definition = $container->getDefinition('hateoas.configuration.provider.chain');
         $arguments = $definition->getArguments();
         $this->assertCount(1, $arguments);
         $this->assertCount(3, $arguments[0]);
@@ -131,23 +131,6 @@ class BazingaHateoasExtensionTest extends TestCase
 
     /**
      * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Service invalid_expression_function tagged with hateoas.expression_function must implement Hateoas\Expression\ExpressionFunctionInterface
-     */
-    public function testLoadInvalidExpressionFunction()
-    {
-        $container = $this->getContainerForConfig(array(array()));
-        $container
-            ->setDefinition(
-                'invalid_expression_function',
-                new Definition('stdClass')
-            )
-            ->addTag('hateoas.expression_function')
-        ;
-        $container->compile();
-    }
-
-    /**
-     * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      * @expectedExceptionMessage Service invalid_configuration_extension tagged with hateoas.configuration_extension must implement Hateoas\Configuration\Metadata\ConfigurationExtensionInterface
      */
     public function testLoadInvalidConfigurationExtension()
@@ -192,7 +175,7 @@ class BazingaHateoasExtensionTest extends TestCase
     private function getContainerForConfig(array $configs, KernelInterface $kernel = null)
     {
         if (null === $kernel) {
-            $kernel = $this->getMock(KernelInterface::class);
+            $kernel = $this->createMock(KernelInterface::class);
             $kernel
                 ->expects($this->any())
                 ->method('getBundles')
@@ -200,7 +183,7 @@ class BazingaHateoasExtensionTest extends TestCase
                 ;
         }
 
-        $router  = $this->getMock(UrlGeneratorInterface::class);
+        $router  = $this->createMock(UrlGeneratorInterface::class);
         $bundles = array(
             new BazingaHateoasBundle($kernel),
             new JMSSerializerBundle($kernel),
@@ -216,7 +199,7 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.bundles', array());
         $container->set('annotation_reader', new AnnotationReader());
         $container->set('router', $router);
-        $container->set('debug.stopwatch', $this->getMock(Stopwatch::class));
+        $container->set('debug.stopwatch', $this->createMock(Stopwatch::class));
 
         $container->setParameter('foo', 'bar');
 
