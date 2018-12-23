@@ -27,7 +27,6 @@ class BazingaHateoasBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new UrlGeneratorPass());
-        $container->addCompilerPass(new ExpressionFunctionPass());
         $container->addCompilerPass(new RelationProviderPass());
         $container->addCompilerPass(new ExtensionDriverPass());
     }

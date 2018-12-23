@@ -44,11 +44,8 @@ class BazingaHateoasExtension extends Extension
                 ->replaceArgument(0, $config['metadata']['file_cache']['dir']);
 
             $dir = $container->getParameterBag()->resolveValue($config['metadata']['file_cache']['dir']);
-
-            if (!file_exists($dir)) {
-                if (!$rs = @mkdir($dir, 0777, true)) {
-                    throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $dir));
-                }
+            if (!is_dir($dir) && !@mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $dir));
             }
         } else {
             $container->setAlias(
