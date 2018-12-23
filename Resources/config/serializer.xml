@@ -3,89 +3,51 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <!-- Factories -->
-        <parameter key="hateoas.link_factory.class">Hateoas\Factory\LinkFactory</parameter>
-        <parameter key="hateoas.links_factory.class">Hateoas\Factory\LinksFactory</parameter>
-        <parameter key="hateoas.embeds_factory.class">Hateoas\Factory\EmbeddedsFactory</parameter>
-
-        <!-- Expressions -->
-        <parameter key="hateoas.expression.evaluator.class">Bazinga\Bundle\HateoasBundle\Hateoas\Expression\LazyFunctionExpressionEvaluator</parameter>
-        <parameter key="bazinga_hateoas.expression_language.class">Bazinga\Bundle\HateoasBundle\ExpressionLanguage\ExpressionLanguage</parameter>
-        <parameter key="hateoas.expression.link.class">Hateoas\Expression\LinkExpressionFunction</parameter>
-
-        <!-- Serializers & Handlers -->
-        <parameter key="hateoas.serializer.xml.class">Hateoas\Serializer\XmlSerializer</parameter>
-        <parameter key="hateoas.serializer.json_hal.class">Hateoas\Serializer\JsonHalSerializer</parameter>
-        <parameter key="hateoas.serializer.exclusion_manager.class">Hateoas\Serializer\ExclusionManager</parameter>
-
-        <!-- Subscribers -->
-        <parameter key="hateoas.event_subscriber.xml.class">Hateoas\Serializer\EventSubscriber\XmlEventSubscriber</parameter>
-        <parameter key="hateoas.event_subscriber.json.class">Hateoas\Serializer\EventSubscriber\JsonEventSubscriber</parameter>
-
-        <!-- Inline deferrers -->
-        <parameter key="hateoas.inline_deferrer.embeds.class">Hateoas\Serializer\Metadata\InlineDeferrer</parameter>
-        <parameter key="hateoas.inline_deferrer.links.class">Hateoas\Serializer\Metadata\InlineDeferrer</parameter>
-    </parameters>
-
     <services>
         <!-- Factories -->
-        <service id="hateoas.link_factory" class="%hateoas.link_factory.class%" public="false">
-            <argument type="service" id="hateoas.expression.evaluator" />
+        <service id="hateoas.link_factory" class="Hateoas\Factory\LinkFactory" public="false">
             <argument type="service" id="hateoas.generator.registry" />
+            <argument type="service" id="jms_serializer.expression_evaluator" />
         </service>
 
-        <service id="hateoas.links_factory" class="%hateoas.links_factory.class%" public="false">
-            <argument type="service" id="hateoas.configuration.relations_repository" />
+        <service id="hateoas.links_factory" class="Hateoas\Factory\LinksFactory" public="false">
+            <argument type="service" id="hateoas.configuration.metadata_factory" />
             <argument type="service" id="hateoas.link_factory" />
             <argument type="service" id="hateoas.serializer.exclusion_manager" />
         </service>
 
-        <service id="hateoas.embeds_factory" class="%hateoas.embeds_factory.class%" public="false">
-            <argument type="service" id="hateoas.configuration.relations_repository" />
-            <argument type="service" id="hateoas.expression.evaluator" />
+        <service id="hateoas.embeds_factory" class="Hateoas\Factory\EmbeddedsFactory" public="false">
+            <argument type="service" id="hateoas.configuration.metadata_factory" />
+            <argument type="service" id="jms_serializer.expression_evaluator" />
             <argument type="service" id="hateoas.serializer.exclusion_manager" />
         </service>
 
-        <!-- Expressions -->
-        <service id="hateoas.expression.evaluator" class="%hateoas.expression.evaluator.class%">
-            <argument type="service" id="bazinga_hateoas.expression_language" />
-            <argument type="collection"/>
-            <argument type="service" id="service_container" />
-            <call method="setContextVariable">
-                <argument>container</argument>
-                <argument type="service" id="service_container"/>
-            </call>
-        </service>
-
-        <service id="bazinga_hateoas.expression_language" class="%bazinga_hateoas.expression_language.class%" />
-
-        <service id="hateoas.expression.link" class="%hateoas.expression.link.class%" public="true">
-            <argument type="service" id="hateoas.helper.link" />
-            <tag name="hateoas.expression_function"/>
-        </service>
+        <!--<service id="hateoas.expression.link" class="Hateoas\Expression\LinkExpressionFunction" public="true">-->
+            <!--<argument type="service" id="hateoas.helper.link" />-->
+            <!--<tag name="hateoas.expression_function"/>-->
+        <!--</service>-->
 
         <!-- Serializers & Handlers -->
-        <service id="hateoas.serializer.xml" class="%hateoas.serializer.xml.class%" public="false">
-            <call method="setMetadataFactory">
-                <argument type="service" id="jms_serializer.metadata_factory" />
-            </call>
-        </service>
-        <service id="hateoas.serializer.json_hal" class="%hateoas.serializer.json_hal.class%" public="false" />
+        <service id="hateoas.serializer.xml" class="Hateoas\Serializer\XmlSerializer" public="false"/>
+        <service id="hateoas.serializer.json_hal" class="Hateoas\Serializer\JsonHalSerializer" public="false" />
 
-        <service id="hateoas.serializer.exclusion_manager" class="%hateoas.serializer.exclusion_manager.class%">
-            <argument type="service" id="hateoas.expression.evaluator" />
+        <service id="hateoas.serializer.exclusion.expression_language_strategy" class="JMS\Serializer\Exclusion\ExpressionLanguageExclusionStrategy" public="false">
+            <argument type="service" id="jms_serializer.expression_evaluator" />
+        </service>
+
+        <service id="hateoas.serializer.exclusion_manager" class="Hateoas\Serializer\ExclusionManager">
+            <argument type="service" id="hateoas.serializer.exclusion.expression_language_strategy" />
         </service>
 
         <!-- Subscribers -->
-        <service id="hateoas.event_subscriber.xml" class="%hateoas.event_subscriber.xml.class%">
+        <service id="hateoas.event_subscriber.xml" class="Hateoas\Serializer\EventSubscriber\XmlEventSubscriber">
             <tag name="jms_serializer.event_subscriber" />
             <argument /> <!-- xml serializer -->
             <argument type="service" id="hateoas.links_factory" />
             <argument type="service" id="hateoas.embeds_factory" />
         </service>
 
-        <service id="hateoas.event_subscriber.json" class="%hateoas.event_subscriber.json.class%">
+        <service id="hateoas.event_subscriber.json" class="Hateoas\Serializer\EventSubscriber\JsonEventSubscriber">
             <tag name="jms_serializer.event_subscriber" />
             <argument /> <!-- json serializer -->
             <argument type="service" id="hateoas.links_factory" />
@@ -94,12 +56,7 @@
             <argument type="service" id="hateoas.inline_deferrer.links" />
         </service>
 
-        <service id="hateoas.inline_deferrer.embeds" class="%hateoas.inline_deferrer.embeds.class%" public="false">
-            <argument type="service" id="jms_serializer.metadata_factory"/>
-        </service>
-
-        <service id="hateoas.inline_deferrer.links" class="%hateoas.inline_deferrer.links.class%" public="false">
-            <argument type="service" id="jms_serializer.metadata_factory"/>
-        </service>
+        <service id="hateoas.inline_deferrer.embeds" class="Hateoas\Serializer\Metadata\InlineDeferrer" public="false"/>
+        <service id="hateoas.inline_deferrer.links" class="Hateoas\Serializer\Metadata\InlineDeferrer" public="false"/>
     </services>
 </container>
