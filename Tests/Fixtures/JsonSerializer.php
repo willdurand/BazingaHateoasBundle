@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Bazinga\Bundle\HateoasBundle\Tests\Fixtures;
 
-use Hateoas\Serializer\JsonSerializerInterface;
+use Hateoas\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Visitor\SerializationVisitorInterface;
 
-class JsonSerializer implements JsonSerializerInterface
+class JsonSerializer implements SerializerInterface
 {
     public function serializeLinks(array $links, SerializationVisitorInterface $visitor, SerializationContext $context): void
     {

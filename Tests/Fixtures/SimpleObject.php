@@ -18,6 +18,21 @@ use JMS\Serializer\Annotation\Type;
  *     "all_2",
  *     href = "expr(link(object, 'all'))"
  * )
+ * @Hateoas\Relation(
+ *     "e1",
+ *     embedded=@Hateoas\Embedded(
+ *         "expr(1)",
+ *         type="string"
+ *    )
+ * )
+ * @Hateoas\Relation(
+ *     "e2",
+ *     embedded=@Hateoas\Embedded(
+ *         "expr(2)",
+ *         type="float",
+ *          exclusion=@Hateoas\Exclusion(excludeIf="expr(false)")
+ *    )
+ * )
  */
 class SimpleObject
 {

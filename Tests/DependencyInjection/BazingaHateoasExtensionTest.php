@@ -50,7 +50,11 @@ class BazingaHateoasExtensionTest extends TestCase
                     ],
                     'all_2' => ['href' => 'http://somewhere/simple-objects'],
                 ],
-            ]),
+                '_embedded' => [
+                    'e1' => '1',
+                    'e2' => 2.0,
+                ],
+            ], JSON_PRESERVE_ZERO_FRACTION),
             $serializer->serialize(new SimpleObject('hello'), 'json')
         );
     }
@@ -104,18 +108,18 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setDefinition('custom_serializer', new Definition($class));
         $container->compile();
 
-        $jsonListener = $container->get('hateoas.event_subscriber.json');
+        $jsonListener = $container->get('hateoas.event_listener.json');
 
         $reflClass = new \ReflectionClass($jsonListener);
-        $reflProp = $reflClass->getProperty('jsonSerializer');
+        $reflProp = $reflClass->getProperty('serializer');
         $reflProp->setAccessible(true);
 
         $this->assertInstanceOf($class, $reflProp->getValue($jsonListener));
 
-        $xmlListener = $container->get('hateoas.event_subscriber.xml');
+        $xmlListener = $container->get('hateoas.event_listener.xml');
 
         $reflClass = new \ReflectionClass($xmlListener);
-        $reflProp = $reflClass->getProperty('xmlSerializer');
+        $reflProp = $reflClass->getProperty('serializer');
         $reflProp->setAccessible(true);
 
         $this->assertInstanceOf('Hateoas\Serializer\XmlSerializer', $reflProp->getValue($xmlListener));

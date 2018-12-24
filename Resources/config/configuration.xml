@@ -28,18 +28,21 @@
             <argument type="service" id="jms_serializer.metadata.file_locator" />
             <argument type="service" id="jms_serializer.expression_evaluator" />
             <argument type="service" id="hateoas.configuration.provider" />
+            <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
         </service>
 
         <service id="hateoas.configuration.metadata.xml_driver" class="Hateoas\Configuration\Metadata\Driver\XmlDriver" public="false">
             <argument type="service" id="jms_serializer.metadata.file_locator" />
             <argument type="service" id="jms_serializer.expression_evaluator" />
             <argument type="service" id="hateoas.configuration.provider" />
+            <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
         </service>
 
         <service id="hateoas.configuration.metadata.annotation_driver" class="Hateoas\Configuration\Metadata\Driver\AnnotationDriver" public="false">
             <argument type="service" id="annotation_reader" />
             <argument type="service" id="jms_serializer.expression_evaluator" />
             <argument type="service" id="hateoas.configuration.provider" />
+            <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
         </service>
 
         <service id="hateoas.configuration.metadata.extension_driver" class="Hateoas\Configuration\Metadata\Driver\ExtensionDriver" public="false">

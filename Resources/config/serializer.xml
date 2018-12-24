@@ -22,11 +22,6 @@
             <argument type="service" id="hateoas.serializer.exclusion_manager" />
         </service>
 
-        <!--<service id="hateoas.expression.link" class="Hateoas\Expression\LinkExpressionFunction" public="true">-->
-            <!--<argument type="service" id="hateoas.helper.link" />-->
-            <!--<tag name="hateoas.expression_function"/>-->
-        <!--</service>-->
-
         <!-- Serializers & Handlers -->
         <service id="hateoas.serializer.xml" class="Hateoas\Serializer\XmlSerializer" public="false"/>
         <service id="hateoas.serializer.json_hal" class="Hateoas\Serializer\JsonHalSerializer" public="false" />
@@ -40,15 +35,17 @@
         </service>
 
         <!-- Subscribers -->
-        <service id="hateoas.event_subscriber.xml" class="Hateoas\Serializer\EventSubscriber\XmlEventSubscriber">
-            <tag name="jms_serializer.event_subscriber" />
+        <service id="hateoas.event_listener.xml" class="Hateoas\Serializer\AddRelationsListener">
+            <tag name="jms_serializer.event_listener" event="serializer.post_serialize" format="xml" method="onPostSerialize" />
             <argument /> <!-- xml serializer -->
             <argument type="service" id="hateoas.links_factory" />
             <argument type="service" id="hateoas.embeds_factory" />
+            <argument type="service" id="hateoas.inline_deferrer.embeds" />
+            <argument type="service" id="hateoas.inline_deferrer.links" />
         </service>
 
-        <service id="hateoas.event_subscriber.json" class="Hateoas\Serializer\EventSubscriber\JsonEventSubscriber">
-            <tag name="jms_serializer.event_subscriber" />
+        <service id="hateoas.event_listener.json" class="Hateoas\Serializer\AddRelationsListener">
+            <tag name="jms_serializer.event_listener" event="serializer.post_serialize" format="json" method="onPostSerialize" />
             <argument /> <!-- json serializer -->
             <argument type="service" id="hateoas.links_factory" />
             <argument type="service" id="hateoas.embeds_factory" />
