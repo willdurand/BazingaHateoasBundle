@@ -10,7 +10,6 @@
 
 namespace Bazinga\Bundle\HateoasBundle;
 
-use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\ExpressionFunctionPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\ExtensionDriverPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\RelationProviderPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\UrlGeneratorPass;
@@ -27,7 +26,6 @@ class BazingaHateoasBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new UrlGeneratorPass());
-        $container->addCompilerPass(new ExpressionFunctionPass());
         $container->addCompilerPass(new RelationProviderPass());
         $container->addCompilerPass(new ExtensionDriverPass());
     }

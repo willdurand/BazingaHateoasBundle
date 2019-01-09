@@ -1,33 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the HateoasBundle package.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @license    MIT License
  */
 
 namespace Bazinga\Bundle\HateoasBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * @author William Durand <william.durand1@gmail.com>
- */
 class BazingaHateoasExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        foreach (array('serializer', 'configuration', 'generator', 'helper', 'twig') as $file) {
+        foreach (['serializer', 'configuration', 'generator', 'helper', 'twig'] as $file) {
             if ('twig' === $file && false === $config['twig_extension']['enabled']) {
                 continue;
             }
@@ -44,11 +41,8 @@ class BazingaHateoasExtension extends Extension
                 ->replaceArgument(0, $config['metadata']['file_cache']['dir']);
 
             $dir = $container->getParameterBag()->resolveValue($config['metadata']['file_cache']['dir']);
-
-            if (!file_exists($dir)) {
-                if (!$rs = @mkdir($dir, 0777, true)) {
-                    throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $dir));
-                }
+            if (!is_dir($dir) && !@mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf('Could not create cache directory "%s".', $dir));
             }
         } else {
             $container->setAlias(
@@ -58,12 +52,12 @@ class BazingaHateoasExtension extends Extension
         }
 
         $container
-            ->getDefinition('hateoas.event_subscriber.json')
+            ->getDefinition('hateoas.event_listener.json')
             ->setPublic(true)
             ->replaceArgument(0, new Reference($config['serializer']['json']));
 
         $container
-            ->getDefinition('hateoas.event_subscriber.xml')
+            ->getDefinition('hateoas.event_listener.xml')
             ->setPublic(true)
             ->replaceArgument(0, new Reference($config['serializer']['xml']));
     }

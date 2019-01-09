@@ -3,14 +3,14 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <parameters>
-        <parameter key="hateoas.helper.link.class">Hateoas\Helper\LinkHelper</parameter>
-    </parameters>
-
     <services>
-        <service id="hateoas.helper.link" class="%hateoas.helper.link.class%" public="true">
+        <service id="hateoas.helper.link" class="Hateoas\Helper\LinkHelper" public="true">
             <argument type="service" id="hateoas.link_factory" />
-            <argument type="service" id="hateoas.configuration.relations_repository" />
+            <argument type="service" id="hateoas.configuration.metadata_factory" />
+        </service>
+
+        <service id="hateoas.expression.link_expression_function" class="Bazinga\Bundle\HateoasBundle\Expression\LinkExpressionFunction" public="false">
+            <tag name="jms.expression.function_provider" />
         </service>
     </services>
 

@@ -22,6 +22,8 @@ of the Composer documentation.
 
 ### Step 2: Enable the Bundle
 
+> Note: this step is not required if you are using Symfony Flex
+
 Then, enable the bundle by adding the following line in the `app/AppKernel.php`
 file of your project:
 
@@ -152,13 +154,12 @@ Allows you to fetch a service from the service container.
 Extending
 ---------
 
-### RelationProviderResolver
+### RelationProvider
 
-A relation provider resolver is a class which provides a PHP callable. This
-callable will provide relations (links) for a given object.
+A relation provider provide relations (links) for a given class.
 
 You can add new relation providers by implementing the 
-`Hateoas\Configuration\Provider\Resolver\RelationProviderResolverInterface`
+`Hateoas\Configuration\Provider\RelationProviderInterface`
 interface and adding a definition to the dependency injection configuration
 with the tag `hateoas.relation_provider`:
 
@@ -171,7 +172,7 @@ with the tag `hateoas.relation_provider`:
     <services>
         <!-- ... -->
 
-        <service id="acme_foo.hateoas.relation_provider_resolver.foobar" class="Acme\FooBundle\Hateoas\RelationProviderResolver\Foobar">
+        <service id="acme_foo.hateoas.relation_provider.foobar" class="Acme\FooBundle\Hateoas\RelationProvider\Foobar">
             <tag name="hateoas.relation_provider" />
         </service>
     </services>

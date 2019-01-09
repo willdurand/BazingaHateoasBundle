@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Bazinga\Bundle\HateoasBundle\Tests\Fixtures;
 
-use Hateoas\Serializer\JsonSerializerInterface;
-use JMS\Serializer\JsonSerializationVisitor;
+use Hateoas\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
+use JMS\Serializer\Visitor\SerializationVisitorInterface;
 
-class JsonSerializer implements JsonSerializerInterface
+class JsonSerializer implements SerializerInterface
 {
-    public function serializeLinks(array $links, JsonSerializationVisitor $visitor, SerializationContext $context)
+    public function serializeLinks(array $links, SerializationVisitorInterface $visitor, SerializationContext $context): void
     {
     }
 
-    public function serializeEmbeddeds(array $embeddeds, JsonSerializationVisitor $visitor, SerializationContext $context)
+    public function serializeEmbeddeds(array $embeddeds, SerializationVisitorInterface $visitor, SerializationContext $context): void
     {
     }
 }
