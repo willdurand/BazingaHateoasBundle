@@ -93,6 +93,32 @@ class SomeController extends Controller
 }
 ````
 
+An example using dependency injection:
+
+````php
+// My/Controller.php
+
+use JMS\Serializer\SerializerInterface; 
+
+class SomeController extends Controller
+{
+    private $serializer;
+    
+    public function __consttruct(SerializerInterface $serializer)
+    {
+        $this->>serializer = $serializer;
+    }
+    
+    public function resourceAction(Request $request)
+    {
+        $post = $repository->find('BlogBundle:post');
+        $json = $this->>serializer->serialize($post, 'json');
+
+        return new Response($json, 200, array('Content-Type' => 'application/json'));
+    }
+}
+````
+
 Expression Language
 -------------------
 
