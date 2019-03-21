@@ -45,19 +45,19 @@
             <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
         </service>
 
-        <service id="hateoas.configuration.metadata.extension_driver" class="Hateoas\Configuration\Metadata\Driver\ExtensionDriver" public="false">
-            <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
+        <service id="hateoas.configuration.metadata.extension_driver" class="Hateoas\Configuration\Metadata\Driver\ExtensionDriver"  public="false">
+            <argument type="service" id="hateoas.configuration.metadata.chain_driver" />
         </service>
 
         <service id="hateoas.configuration.metadata.chain_driver" class="Metadata\Driver\DriverChain" public="false">
             <argument type="collection">
                 <argument type="service" id="hateoas.configuration.metadata.yaml_driver" />
                 <argument type="service" id="hateoas.configuration.metadata.xml_driver" />
-                <argument type="service" id="hateoas.configuration.metadata.extension_driver" />
+                <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
             </argument>
         </service>
 
-        <service id="hateoas.configuration.metadata_driver" alias="hateoas.configuration.metadata.chain_driver" public="true"/>
+        <service id="hateoas.configuration.metadata_driver" alias="hateoas.configuration.metadata.extension_driver" public="true"/>
 
         <service id="hateoas.configuration.metadata.lazy_loading_driver" class="Metadata\Driver\LazyLoadingDriver" public="false">
             <argument type="service" id="service_container" />
