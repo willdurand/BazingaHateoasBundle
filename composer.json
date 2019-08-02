@@ -13,7 +13,7 @@
     "require": {
         "php": "^7.2",
         "symfony/framework-bundle": "~3.0 || ~4.0",
-        "willdurand/hateoas": "^3.0",
+        "willdurand/hateoas": "^3.0@dev",
         "jms/serializer-bundle": "^3.1",
         "symfony/expression-language": "~3.0 || ~4.0"
     },
