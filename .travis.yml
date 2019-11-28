@@ -10,7 +10,9 @@ cache:
     - $HOME/.composer/cache
 
 php:
-    - 7.2
+    - '7.2'
+    - '7.3'
+    - '7.4snapshot'
 
 env:
     - SYMFONY_VERSION=^3.0
