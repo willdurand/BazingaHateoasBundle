@@ -202,6 +202,8 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.cache_dir', $this->getTempDir());
         $container->setParameter('kernel.bundles', []);
         $container->set('annotation_reader', new AnnotationReader());
+        $container->setDefinition('doctrine', new Definition(Registry::class));
+        $container->setDefinition('doctrine_phpcr', new Definition(Registry::class));
         $container->set('router', $router);
         $container->set('debug.stopwatch', $this->createMock(Stopwatch::class));
 
