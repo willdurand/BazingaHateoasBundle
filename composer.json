@@ -19,7 +19,7 @@
     },
     "require-dev": {
         "twig/twig": "~1.12|~2.0",
-        "phpunit/phpunit": "^7",
+        "phpunit/phpunit": "^8.4",
         "symfony/stopwatch": "~3.0 || ~4.0",
         "doctrine/coding-standard": "^5.0"
     },
