@@ -23,12 +23,12 @@ use Symfony\Component\Stopwatch\Stopwatch;
 
 class BazingaHateoasExtensionTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->clearTempDir();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->clearTempDir();
     }
@@ -69,11 +69,10 @@ class BazingaHateoasExtensionTest extends TestCase
         $this->assertCount(3, $arguments[0]);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testRelationProviderPass()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $container = $this->getContainerForConfig([[]]);
         $definition = $container->register('invalid_relation_provider', 'stdClass');
         $definition->addTag('hateoas.relation_provider');
@@ -125,22 +124,20 @@ class BazingaHateoasExtensionTest extends TestCase
         $this->assertInstanceOf('Hateoas\Serializer\XmlSerializer', $reflProp->getValue($xmlListener));
     }
 
-    /**
-     * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     */
     public function testNotLoadingTwigHelper()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $container = $this->getContainerForConfig(['bazinga_hateoas' => ['twig_extension' => ['enabled' => false]]]);
         $container->findDefinition('hateoas.twig.link');
         $container->compile();
     }
 
-    /**
-     * @expectedException Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     * @expectedExceptionMessage Service invalid_configuration_extension tagged with hateoas.configuration_extension must implement Hateoas\Configuration\Metadata\ConfigurationExtensionInterface
-     */
     public function testLoadInvalidConfigurationExtension()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Service invalid_configuration_extension tagged with hateoas.configuration_extension must implement Hateoas\Configuration\Metadata\ConfigurationExtensionInterface');
+
         $container = $this->getContainerForConfig([[]]);
         $container
             ->setDefinition(
@@ -202,6 +199,8 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.cache_dir', $this->getTempDir());
         $container->setParameter('kernel.bundles', []);
         $container->set('annotation_reader', new AnnotationReader());
+        $container->setDefinition('doctrine', new Definition(Registry::class));
+        $container->setDefinition('doctrine_phpcr', new Definition(Registry::class));
         $container->set('router', $router);
         $container->set('debug.stopwatch', $this->createMock(Stopwatch::class));
 
