@@ -106,13 +106,13 @@ class SomeController extends Controller
     
     public function __consttruct(SerializerInterface $serializer)
     {
-        $this->>serializer = $serializer;
+        $this->serializer = $serializer;
     }
     
     public function resourceAction(Request $request)
     {
         $post = $repository->find('BlogBundle:post');
-        $json = $this->>serializer->serialize($post, 'json');
+        $json = $this->serializer->serialize($post, 'json');
 
         return new Response($json, 200, array('Content-Type' => 'application/json'));
     }
