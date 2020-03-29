@@ -140,7 +140,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *          parameters = { "id" = "expr(object.getId())" }
  *      ),
  *      exclusion = @Hateoas\Exclusion(
- *          excludeIf = "expr(not is_granted(['ROLE_ADMIN']))"
+ *          excludeIf = "expr(not is_granted('ROLE_ADMIN'))"
  *      )
  * )
  */
