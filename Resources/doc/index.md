@@ -266,7 +266,7 @@ bazinga_hateoas:
     metadata:
         cache:                file
         file_cache:
-            dir:              %kernel.cache_dir%/hateoas
+            dir:              '%kernel.cache_dir%/hateoas'
     serializer:
         json: hateoas.serializer.json_hal
         xml: hateoas.serializer.xml
