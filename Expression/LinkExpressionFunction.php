@@ -12,7 +12,7 @@ class LinkExpressionFunction implements ExpressionFunctionProviderInterface
     /**
      * @return ExpressionFunction[]
      *
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessReturnAnnotation
      */
     public function getFunctions()

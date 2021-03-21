@@ -5,15 +5,10 @@ declare(strict_types=1);
 namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
-use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\UrlGeneratorPass;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\Compiler\ResolveChildDefinitionsPass;
-use Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass;
-use Symfony\Component\DependencyInjection\Compiler\ResolveParameterPlaceHoldersPass;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -217,8 +212,8 @@ class BazingaHateoasExtensionTest extends TestCase
             $bundle->build($container);
         }
 
-        $this->setOptimizationPasses($container);
-        $container->getCompilerPassConfig()->setRemovingPasses([]);
+        $container->getDefinition('hateoas.configuration.provider.chain')
+            ->setPublic(true);
 
         return $container;
     }
@@ -229,26 +224,5 @@ class BazingaHateoasExtensionTest extends TestCase
         $urlGeneratorDefinition->addTag('hateoas.url_generator');
 
         $container->setDefinition($id, $urlGeneratorDefinition);
-    }
-
-    private function setOptimizationPasses(Container $container)
-    {
-        if (class_exists('Symfony\Component\DependencyInjection\Compiler\ResolveDefinitionTemplatesPass')) {
-            $container->getCompilerPassConfig()->setOptimizationPasses(
-                [
-                    new ResolveParameterPlaceHoldersPass(),
-                    new ResolveDefinitionTemplatesPass(),
-                    new UrlGeneratorPass(),
-                ]
-            );
-        } else {
-            $container->getCompilerPassConfig()->setOptimizationPasses(
-                [
-                    new ResolveParameterPlaceHoldersPass(),
-                    new ResolveChildDefinitionsPass(),
-                    new UrlGeneratorPass(),
-                ]
-            );
-        }
     }
 }
