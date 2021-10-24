@@ -48,4 +48,4 @@ jobs:
           dependency-versions: "${{ matrix.dependencies }}"
 
       - name: "Run PHPUnit"
-        run: "bin/phpunit --coverage-text"
+        run: "vendor/bin/phpunit --coverage-text"
