@@ -7,6 +7,8 @@ namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Hateoas\Configuration\Metadata\Driver\AnnotationDriver;
+use Hateoas\Configuration\Metadata\Driver\AttributeDriver\AttributeReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -140,6 +142,27 @@ class BazingaHateoasExtensionTest extends TestCase
                 new Definition('stdClass')
             )
             ->addTag('hateoas.configuration_extension');
+        $container->compile();
+    }
+
+    public function testAnnotationDriverSupportsAttributes()
+    {
+        if (PHP_VERSION_ID < 80100 || !class_exists(AttributeReader::class)) {
+            $this->markTestSkipped('Attributes are available only on php 8.1 or higher and AttributeReader exists');
+        }
+
+        $container = $this->getContainerForConfig([[]]);
+
+        $definition = $container->getDefinition('hateoas.metadata.annotation_and_attributes_reader');
+        $arguments = $definition->getArguments();
+        $this->assertCount(1, $arguments);
+        $this->assertEquals('annotation_reader', $arguments[0]);
+
+        $definition = $container->getDefinition('hateoas.configuration.metadata.annotation_driver');
+        $arguments = $definition->getArguments();
+        $this->assertCount(4, $arguments);
+        $this->assertEquals('hateoas.metadata.annotation_and_attributes_reader', $arguments[0]);
+
         $container->compile();
     }
 

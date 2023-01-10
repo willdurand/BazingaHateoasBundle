@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Bazinga\Bundle\HateoasBundle\DependencyInjection;
 
+use Hateoas\Configuration\Metadata\Driver\AttributeDriver\AttributeReader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -60,5 +61,13 @@ class BazingaHateoasExtension extends Extension
             ->getDefinition('hateoas.event_listener.xml')
             ->setPublic(true)
             ->replaceArgument(0, new Reference($config['serializer']['xml']));
+
+        if (PHP_VERSION_ID >= 80100 && class_exists(AttributeReader::class)) {
+            $container->register('hateoas.metadata.annotation_and_attributes_reader', AttributeReader::class)
+                ->setArgument(0, new Reference('annotation_reader'));
+
+            $container->findDefinition('hateoas.configuration.metadata.annotation_driver')
+                ->setArgument(0, new Reference('hateoas.metadata.annotation_and_attributes_reader'));
+        }
     }
 }
