@@ -38,15 +38,30 @@
             <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
         </service>
 
+        <!-- The `Hateoas\Configuration\Metadata\Driver\AnnotationDriver` class and its corresponding `hateoas.configuration.metadata.annotation_driver` service are deprecated in favor of the `hateoas.configuration.metadata.attribute_driver` service -->
         <service id="hateoas.configuration.metadata.annotation_driver" class="Hateoas\Configuration\Metadata\Driver\AnnotationDriver" public="false">
-            <argument type="service" id="annotation_reader" />
+            <argument type="service" id="hateoas.configuration.metadata.annotation_reader" />
             <argument type="service" id="jms_serializer.expression_evaluator" />
             <argument type="service" id="hateoas.configuration.provider" />
             <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
         </service>
 
+        <service id="hateoas.configuration.metadata.attribute_driver" class="Hateoas\Configuration\Metadata\Driver\AttributeDriver" public="false">
+            <argument type="service" id="jms_serializer.expression_evaluator" />
+            <argument type="service" id="hateoas.configuration.provider" />
+            <argument type="service" id="jms_serializer.type_parser" on-invalid="null" />
+        </service>
+
+        <!-- The `hateoas.configuration.metadata.annotation_or_attribute_driver` is necessary to provide the extension feature to the `hateoas.configuration.metadata.attribute_driver` service -->
+        <service id="hateoas.configuration.metadata.annotation_or_attribute_driver" class="Metadata\Driver\DriverChain" public="false">
+            <argument type="collection">
+                <argument type="service" id="hateoas.configuration.metadata.attribute_driver" on-invalid="ignore" />
+                <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
+            </argument>
+        </service>
+
         <service id="hateoas.configuration.metadata.extension_driver" class="Hateoas\Configuration\Metadata\Driver\ExtensionDriver" public="false">
-            <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
+            <argument type="service" id="hateoas.configuration.metadata.annotation_or_attribute_driver" />
         </service>
 
         <service id="hateoas.configuration.metadata.chain_driver" class="Metadata\Driver\DriverChain" public="false">
@@ -68,6 +83,8 @@
         <service id="hateoas.configuration.metadata.cache.file_cache" class="Metadata\Cache\FileCache" public="false">
             <argument /><!-- Directory -->
         </service>
+
+        <service id="hateoas.configuration.metadata.annotation_reader" class="Doctrine\Common\Annotations\AnnotationReader" public="false" />
 
         <service id="hateoas.configuration.metadata.cache" alias="hateoas.configuration.metadata.cache.file_cache" public="false" />
 
