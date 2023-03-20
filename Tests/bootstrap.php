@@ -16,4 +16,7 @@ EOT
     );
 }
 
-AnnotationRegistry::registerLoader('class_exists');
+// Method has been removed in doctrine/annotations:2
+if (method_exists(AnnotationRegistry::class, 'registerLoader')) {
+    AnnotationRegistry::registerLoader('class_exists');
+}
