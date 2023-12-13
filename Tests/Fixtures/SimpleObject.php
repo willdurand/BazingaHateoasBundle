@@ -40,6 +40,8 @@ class SimpleObject
      * @Type("string")
      * @SerializedName("name")
      */
+    #[Type('string')]
+    #[SerializedName('name')]
     private $value;
 
     public function __construct($value)
