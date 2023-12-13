@@ -12,10 +12,9 @@ class LinkExpressionFunction implements ExpressionFunctionProviderInterface
     /**
      * @return ExpressionFunction[]
      *
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.UselessReturnAnnotation
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new ExpressionFunction('link', static function ($object, $rel, $absolute = false) {
