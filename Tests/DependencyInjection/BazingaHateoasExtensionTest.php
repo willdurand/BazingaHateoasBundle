@@ -6,9 +6,6 @@ namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Hateoas\Configuration\Metadata\Driver\AnnotationDriver;
-use Hateoas\Configuration\Metadata\Driver\AttributeDriver\AttributeReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -145,25 +142,17 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->compile();
     }
 
-    public function testAnnotationDriverSupportsAttributes()
+    public function testSupportedAttributeDriver()
     {
-        if (PHP_VERSION_ID < 80100 || !class_exists(AttributeReader::class)) {
-            $this->markTestSkipped('Attributes are available only on php 8.1 or higher and AttributeReader exists');
-        }
-
         $container = $this->getContainerForConfig([[]]);
-
-        $definition = $container->getDefinition('hateoas.metadata.annotation_and_attributes_reader');
-        $arguments = $definition->getArguments();
-        $this->assertCount(1, $arguments);
-        $this->assertEquals('annotation_reader', $arguments[0]);
-
-        $definition = $container->getDefinition('hateoas.configuration.metadata.annotation_driver');
-        $arguments = $definition->getArguments();
-        $this->assertCount(4, $arguments);
-        $this->assertEquals('hateoas.metadata.annotation_and_attributes_reader', $arguments[0]);
-
         $container->compile();
+
+        // Hateoas attributes are supported as of php 8.1.
+        if (PHP_VERSION_ID < 80100) {
+            self::assertFalse($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
+        } else {
+            self::assertTrue($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
+        }
     }
 
     private function clearTempDir()
@@ -217,7 +206,6 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.cache_dir', $this->getTempDir());
         $container->setParameter('kernel.bundles', []);
         $container->setParameter('kernel.bundles_metadata', []);
-        $container->set('annotation_reader', new AnnotationReader());
         $container->setDefinition('doctrine', new Definition(Registry::class));
         $container->setDefinition('doctrine_phpcr', new Definition(Registry::class));
         $container->set('router', $router);
@@ -237,6 +225,9 @@ class BazingaHateoasExtensionTest extends TestCase
         }
 
         $container->getDefinition('hateoas.configuration.provider.chain')
+            ->setPublic(true);
+
+        $container->getDefinition('hateoas.configuration.metadata.attribute_driver')
             ->setPublic(true);
 
         return $container;
