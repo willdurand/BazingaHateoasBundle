@@ -6,7 +6,6 @@ namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
-use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -211,7 +210,8 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setDefinition('doctrine_phpcr', new Definition(Registry::class));
         $container->set('router', $router);
         $container->set('debug.stopwatch', $this->createMock(Stopwatch::class));
-        $container->set('annotation_reader', $this->createMock(AnnotationReader::class));
+        // The annotation_reader is used by JMSSerializerBundle versions lower than 5.4.0
+        $container->setAlias('annotation_reader', 'hateoas.configuration.metadata.annotation_reader');
 
         $container->setParameter('foo', 'bar');
 
