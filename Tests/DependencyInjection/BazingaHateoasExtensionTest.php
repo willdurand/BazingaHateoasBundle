@@ -206,12 +206,12 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.cache_dir', $this->getTempDir());
         $container->setParameter('kernel.bundles', []);
         $container->setParameter('kernel.bundles_metadata', []);
+        // The annotation_reader is used by JMSSerializerBundle versions lower than 5.4.0
+        $container->setAlias('annotation_reader', 'hateoas.configuration.metadata.annotation_reader');
         $container->setDefinition('doctrine', new Definition(Registry::class));
         $container->setDefinition('doctrine_phpcr', new Definition(Registry::class));
         $container->set('router', $router);
         $container->set('debug.stopwatch', $this->createMock(Stopwatch::class));
-        // The annotation_reader is used by JMSSerializerBundle versions lower than 5.4.0
-        $container->setAlias('annotation_reader', 'hateoas.configuration.metadata.annotation_reader');
 
         $container->setParameter('foo', 'bar');
 
