@@ -10,6 +10,7 @@
 
 namespace Bazinga\Bundle\HateoasBundle;
 
+use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\AttributeDriverPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\CacheWarmupPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\ExtensionDriverPass;
 use Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler\RelationProviderPass;
@@ -28,6 +29,7 @@ class BazingaHateoasBundle extends Bundle
 
         $container->addCompilerPass(new UrlGeneratorPass());
         $container->addCompilerPass(new RelationProviderPass());
+        $container->addCompilerPass(new AttributeDriverPass());
         $container->addCompilerPass(new ExtensionDriverPass());
         $container->addCompilerPass(new CacheWarmupPass());
     }

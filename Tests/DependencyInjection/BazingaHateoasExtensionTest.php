@@ -6,7 +6,6 @@ namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
-use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -143,6 +142,19 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->compile();
     }
 
+    public function testSupportedAttributeDriver()
+    {
+        $container = $this->getContainerForConfig([[]]);
+        $container->compile();
+
+        // Hateoas attributes are supported as of php 8.1.
+        if (PHP_VERSION_ID < 80100) {
+            self::assertFalse($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
+        } else {
+            self::assertTrue($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
+        }
+    }
+
     private function clearTempDir()
     {
         // clear temporary directory
@@ -194,7 +206,8 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->setParameter('kernel.cache_dir', $this->getTempDir());
         $container->setParameter('kernel.bundles', []);
         $container->setParameter('kernel.bundles_metadata', []);
-        $container->set('annotation_reader', new AnnotationReader());
+        // The annotation_reader is used by JMSSerializerBundle versions lower than 5.4.0
+        $container->setAlias('annotation_reader', 'hateoas.configuration.metadata.annotation_reader');
         $container->setDefinition('doctrine', new Definition(Registry::class));
         $container->setDefinition('doctrine_phpcr', new Definition(Registry::class));
         $container->set('router', $router);
@@ -214,6 +227,9 @@ class BazingaHateoasExtensionTest extends TestCase
         }
 
         $container->getDefinition('hateoas.configuration.provider.chain')
+            ->setPublic(true);
+
+        $container->getDefinition('hateoas.configuration.metadata.attribute_driver')
             ->setPublic(true);
 
         return $container;

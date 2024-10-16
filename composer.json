@@ -15,7 +15,7 @@
         "jms/serializer-bundle": "^3.1 || ^4.2 || ^5.0",
         "symfony/expression-language": "~3.0 || ~4.0 || ~5.0 || ~6.0 || ~7.0",
         "symfony/framework-bundle": "~3.0 || ~4.0 || ~5.0 || ~6.0 || ~7.0",
-        "willdurand/hateoas": "^3.5"
+        "willdurand/hateoas": "^3.11@beta"
     },
     "require-dev": {
         "doctrine/annotations": "^1.13.2 || ^2.0",
