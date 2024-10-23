@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 class RelationProviderPass implements CompilerPassInterface
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function process(ContainerBuilder $container)
     {

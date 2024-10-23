@@ -34,6 +34,8 @@
 
         <exclude name="SlevomatCodingStandard.Commenting.RequireOneLinePropertyDocComment"/>
 
+        <exclude name="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall.MissingTrailingComma"/>
+
         <exclude name="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification"/>
         <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableParameterTypeHintSpecification"/>
         <exclude name="SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingTraversableReturnTypeHintSpecification"/>
@@ -84,9 +86,6 @@
         <exclude-pattern>Tests/*</exclude-pattern>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingAnyTypeHint">
-        <exclude-pattern>Tests/*</exclude-pattern>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements">
         <exclude-pattern>Tests/*</exclude-pattern>
     </rule>
 

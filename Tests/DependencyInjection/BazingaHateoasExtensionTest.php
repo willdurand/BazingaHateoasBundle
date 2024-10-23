@@ -178,9 +178,7 @@ class BazingaHateoasExtensionTest extends TestCase
         return sys_get_temp_dir() . '/hateoas-bundle';
     }
 
-    /**
-     * @see https://github.com/schmittjoh/JMSSerializerBundle/blob/master/Tests/DependencyInjection/JMSSerializerExtensionTest.php
-     */
+    /** @see https://github.com/schmittjoh/JMSSerializerBundle/blob/master/Tests/DependencyInjection/JMSSerializerExtensionTest.php */
     private function getContainerForConfig(array $configs, ?KernelInterface $kernel = null)
     {
         if (null === $kernel) {
