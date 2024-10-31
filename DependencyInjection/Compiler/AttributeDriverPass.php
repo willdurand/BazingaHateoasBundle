@@ -23,5 +23,10 @@ class AttributeDriverPass implements CompilerPassInterface
         if (PHP_VERSION_ID < 80100) {
             $container->removeDefinition('hateoas.configuration.metadata.attribute_driver');
         }
+        
+        if (!class_exists(AnnotationReader::class)) {
+            $container->removeDefinition('hateoas.configuration.metadata.annotation_reader');
+            $container->removeDefinition('hateoas.configuration.metadata.annotation_driver');
+        }
     }
 }

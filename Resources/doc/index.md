@@ -20,6 +20,17 @@ This command requires you to have Composer installed globally, as explained
 in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
 of the Composer documentation.
 
+If you want to use annotations for configuration you need
+to install the `doctrine/annotations` package:
+
+```sh
+composer require doctrine/annotations
+```
+
+If your app uses PHP 8.1 or higher it is recommended to use native PHP
+attributes.
+In this case you don't need to install the Doctrine package.
+
 ### Step 2: Enable the Bundle
 
 > Note: this step is not required if you are using Symfony Flex

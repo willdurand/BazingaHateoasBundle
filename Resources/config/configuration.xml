@@ -56,7 +56,7 @@
         <service id="hateoas.configuration.metadata.annotation_or_attribute_driver" class="Metadata\Driver\DriverChain" public="false">
             <argument type="collection">
                 <argument type="service" id="hateoas.configuration.metadata.attribute_driver" on-invalid="ignore" />
-                <argument type="service" id="hateoas.configuration.metadata.annotation_driver" />
+                <argument type="service" id="hateoas.configuration.metadata.annotation_driver" on-invalid="ignore" />
             </argument>
         </service>
 
