@@ -26,7 +26,7 @@ class CacheWarmupPass implements CompilerPassInterface
 
             $warmupService->setArgument(1, $container->findDefinition('hateoas.configuration.metadata_factory'));
             $container->setDefinition('hateoas.configuration.metadata.cache.cache_warmer', $warmupService);
-        } catch (ServiceNotFoundException $exception) {
+        } catch (ServiceNotFoundException) {
         }
     }
 }
