@@ -20,6 +20,7 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
         dependencies:
           - "highest"
           - "lowest"
@@ -40,6 +41,11 @@ jobs:
           - php-version: 8.3
             symfony-require: "^7.0"
           - php-version: 8.3
+            symfony-require: "^7.0"
+            remove-annotations: "yes"
+          - php-version: 8.4
+            symfony-require: "^7.0"
+          - php-version: 8.4
             symfony-require: "^7.0"
             remove-annotations: "yes"
 
