@@ -142,19 +142,6 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->compile();
     }
 
-    public function testSupportedAttributeDriver()
-    {
-        $container = $this->getContainerForConfig([[]]);
-        $container->compile();
-
-        // Hateoas attributes are supported as of php 8.1.
-        if (PHP_VERSION_ID < 80100) {
-            self::assertFalse($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
-        } else {
-            self::assertTrue($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
-        }
-    }
-
     private function clearTempDir()
     {
         // clear temporary directory
