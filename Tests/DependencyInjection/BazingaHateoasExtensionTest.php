@@ -6,6 +6,9 @@ namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
+use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObjectAnnotation;
+use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObjectAnnotationAndAttribute;
+use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,7 +30,8 @@ class BazingaHateoasExtensionTest extends TestCase
         $this->clearTempDir();
     }
 
-    public function testLoad()
+    /** @dataProvider getTestLoadData */
+    public function testLoad($object)
     {
         $container = $this->getContainerForConfig([[]]);
         $container->compile();
@@ -49,8 +53,19 @@ class BazingaHateoasExtensionTest extends TestCase
                     'e2' => 2.0,
                 ],
             ], JSON_PRESERVE_ZERO_FRACTION),
-            $serializer->serialize(new SimpleObject('hello'), 'json')
+            $serializer->serialize($object, 'json')
         );
+    }
+
+    /** @return array<SimpleObject|SimpleObjectAnnotation|SimpleObjectAnnotationAndAttribute> */
+    public static function getTestLoadData(): iterable
+    {
+        yield [new SimpleObject('hello')];
+
+        if (class_exists(AnnotationReader::class)) {
+            yield [new SimpleObjectAnnotation('hello')];
+            yield [new SimpleObjectAnnotationAndAttribute('hello')];
+        }
     }
 
     public function testRelationProviderPassInvalidProvider()
