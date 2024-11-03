@@ -24,9 +24,6 @@ jobs:
         dependencies:
           - "highest"
           - "lowest"
-        remove-annotations:
-          - "yes"
-          - "no"
         symfony-require:
           - "^3.0"
           - "^4.0"
@@ -34,14 +31,32 @@ jobs:
           - "^6.0"
         include:
           - php-version: 8.2
+            symfony-require: "^5.0"
+            remove-annotations: "yes"
+          - php-version: 8.2
+            symfony-require: "^6.0"
+            remove-annotations: "yes"
+          - php-version: 8.2
             symfony-require: "^7.0"
           - php-version: 8.2
             symfony-require: "^7.0"
             remove-annotations: "yes"
           - php-version: 8.3
+            symfony-require: "^5.0"
+            remove-annotations: "yes"
+          - php-version: 8.3
+            symfony-require: "^6.0"
+            remove-annotations: "yes"
+          - php-version: 8.3
             symfony-require: "^7.0"
           - php-version: 8.3
             symfony-require: "^7.0"
+            remove-annotations: "yes"
+          - php-version: 8.4
+            symfony-require: "^5.0"
+            remove-annotations: "yes"
+          - php-version: 8.4
+            symfony-require: "^6.0"
             remove-annotations: "yes"
           - php-version: 8.4
             symfony-require: "^7.0"
