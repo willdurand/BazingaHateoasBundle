@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-    backupStaticAttributes="false"
-    colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    processIsolation="false"
-    stopOnFailure="false"
-    bootstrap="./Tests/bootstrap.php"
-    >
-
-    <testsuites>
-        <testsuite name="BazingaHateoasBundle Test Suite">
-            <directory>./Tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>.</directory>
-            <exclude>
-                <directory>Resources</directory>
-                <directory>Tests</directory>
-                <directory>vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         bootstrap="./Tests/bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+         backupStaticProperties="false"
+         failOnRisky="true"
+         failOnWarning="true">
+  <testsuites>
+    <testsuite name="BazingaHateoasBundle Test Suite">
+      <directory>./Tests</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory>.</directory>
+    </include>
+    <exclude>
+      <directory>Resources</directory>
+      <directory>Tests</directory>
+      <directory>vendor</directory>
+    </exclude>
+  </source>
 </phpunit>
