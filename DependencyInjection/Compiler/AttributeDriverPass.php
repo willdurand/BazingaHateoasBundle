@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Bazinga\Bundle\HateoasBundle\DependencyInjection\Compiler;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -20,8 +21,9 @@ class AttributeDriverPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (PHP_VERSION_ID < 80100) {
-            $container->removeDefinition('hateoas.configuration.metadata.attribute_driver');
+        if (!class_exists(AnnotationReader::class)) {
+            $container->removeDefinition('hateoas.configuration.metadata.annotation_reader');
+            $container->removeDefinition('hateoas.configuration.metadata.annotation_driver');
         }
     }
 }

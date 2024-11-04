@@ -6,6 +6,9 @@ namespace Bazinga\Bundle\HateoasBundle\Tests\DependencyInjection;
 
 use Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObject;
+use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObjectAnnotation;
+use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObjectAnnotationAndAttribute;
+use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,7 +30,8 @@ class BazingaHateoasExtensionTest extends TestCase
         $this->clearTempDir();
     }
 
-    public function testLoad()
+    /** @dataProvider getTestLoadData */
+    public function testLoad($object)
     {
         $container = $this->getContainerForConfig([[]]);
         $container->compile();
@@ -49,8 +53,19 @@ class BazingaHateoasExtensionTest extends TestCase
                     'e2' => 2.0,
                 ],
             ], JSON_PRESERVE_ZERO_FRACTION),
-            $serializer->serialize(new SimpleObject('hello'), 'json')
+            $serializer->serialize($object, 'json')
         );
+    }
+
+    /** @return array<SimpleObject|SimpleObjectAnnotation|SimpleObjectAnnotationAndAttribute> */
+    public static function getTestLoadData(): iterable
+    {
+        yield [new SimpleObject('hello')];
+
+        if (class_exists(AnnotationReader::class)) {
+            yield [new SimpleObjectAnnotation('hello')];
+            yield [new SimpleObjectAnnotationAndAttribute('hello')];
+        }
     }
 
     public function testRelationProviderPassInvalidProvider()
@@ -142,19 +157,6 @@ class BazingaHateoasExtensionTest extends TestCase
         $container->compile();
     }
 
-    public function testSupportedAttributeDriver()
-    {
-        $container = $this->getContainerForConfig([[]]);
-        $container->compile();
-
-        // Hateoas attributes are supported as of php 8.1.
-        if (PHP_VERSION_ID < 80100) {
-            self::assertFalse($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
-        } else {
-            self::assertTrue($container->hasDefinition('hateoas.configuration.metadata.attribute_driver'));
-        }
-    }
-
     private function clearTempDir()
     {
         // clear temporary directory
@@ -179,7 +181,7 @@ class BazingaHateoasExtensionTest extends TestCase
     }
 
     /** @see https://github.com/schmittjoh/JMSSerializerBundle/blob/master/Tests/DependencyInjection/JMSSerializerExtensionTest.php */
-    private function getContainerForConfig(array $configs, ?KernelInterface $kernel = null)
+    private function getContainerForConfig(array $configs, KernelInterface|null $kernel = null)
     {
         if (null === $kernel) {
             $kernel = $this->createMock(KernelInterface::class);

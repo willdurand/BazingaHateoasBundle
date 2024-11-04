@@ -20,26 +20,37 @@ This command requires you to have Composer installed globally, as explained
 in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
 of the Composer documentation.
 
+If you want to use annotations for configuration you need
+to install the `doctrine/annotations` package:
+
+```sh
+composer require doctrine/annotations
+```
+
+If your app uses PHP 8.1 or higher it is recommended to use native PHP
+attributes.
+In this case you don't need to install the Doctrine package.
+
 ### Step 2: Enable the Bundle
 
 > Note: this step is not required if you are using Symfony Flex
 
-Then, enable the bundle by adding the following line in the `app/AppKernel.php`
+Then, enable the bundle by adding the following line in the `src/AppKernel.php`
 file of your project:
 
 ```php
 <?php
-// app/AppKernel.php
+// src/AppKernel.php
 
 // ...
 class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             // ...
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
-        );
+        ];
         
         // ...
     }
@@ -51,15 +62,15 @@ class AppKernel extends Kernel
  > registered. If you haven't done that already, you should register it in the kernel aswell:
  >
  > ```php
- > // app/AppKernel.php
+ > // src/AppKernel.php
  > 
  > // ...
  > public function registerBundles()
  > {
- >     $bundles = array(
+ >     $bundles = [
  >         // ...
  >         new JMS\SerializerBundle\JMSSerializerBundle(),
- >     );
+ >     ];
  >
  >     // ...
  > }
@@ -88,7 +99,7 @@ class SomeController extends Controller
         $post = $repository->find('BlogBundle:post');
         $json = $this->container->get('jms_serializer')->serialize($post, 'json');
 
-        return new Response($json, 200, array('Content-Type' => 'application/json'));
+        return new Response($json, 200, ['Content-Type' => 'application/json']);
     }
 }
 ````
@@ -102,11 +113,8 @@ use JMS\Serializer\SerializerInterface;
 
 class SomeController extends Controller
 {
-    private $serializer;
-    
-    public function __consttruct(SerializerInterface $serializer)
+    public function __construct(private readonly SerializerInterface $serializer)
     {
-        $this->serializer = $serializer;
     }
     
     public function resourceAction(Request $request)
@@ -114,7 +122,7 @@ class SomeController extends Controller
         $post = $repository->find('BlogBundle:post');
         $json = $this->serializer->serialize($post, 'json');
 
-        return new Response($json, 200, array('Content-Type' => 'application/json'));
+        return new Response($json, 200, ['Content-Type' => 'application/json']);
     }
 }
 ````
@@ -132,18 +140,16 @@ has certain permissions or not. For example:
 ```php
 use Hateoas\Configuration\Annotation as Hateoas;
 
-/**
- * @Hateoas\Relation(
- *      "delete",
- *      href = @Hateoas\Route(
- *          "post_delete",
- *          parameters = { "id" = "expr(object.getId())" }
- *      ),
- *      exclusion = @Hateoas\Exclusion(
- *          excludeIf = "expr(not is_granted('ROLE_ADMIN'))"
- *      )
- * )
- */
+#[Hateoas\Relation(
+    'delete',
+    href: new Hateoas\Route(
+        "post_delete",
+        parameters: ['id' => 'expr(object.getId())'],
+    ),
+    exclusion: new Hateoas\Exclusion(
+        excludeIf: "expr(not is_granted('ROLE_ADMIN'))",
+    )
+)]
 class Post
 {
     // ...
@@ -157,16 +163,14 @@ the route will be excluded.
 
 Allows you to fetch a parameter from the service container:
 
-```
-/**
- * @Hateoas\Relation(
- *      "delete",
- *      href = @Hateoas\Route(
- *          "post_delete",
- *          parameters = { "foo" = "expr(parameter('foo'))" }
- *      )
- * )
- */
+```php
+#[Hateoas\Relation(
+    'delete',
+    href: new Hateoas\Route(
+        'post_delete',
+        parameters: ['foo' => "expr(parameter('foo'))"],
+    )
+)]
 class Post
 {
     // ...
@@ -243,7 +247,7 @@ class AcmeFooConfigurationExtension implements ConfigurationExtensionInterface
      */
     public function decorate(ClassMetadataInterface $classMetadata)
     {
-        if (0 === strpos('Acme\Foo\Model', $classMetadata->getName())) {
+        if (str_starts_with('Acme\Foo\Model', $classMetadata->getName())) {
             // Add a "root" relation to all classes in the `Acme\Foo\Model` namespace
             $classMetadata->addRelation(
                 new Relation(
