@@ -10,6 +10,7 @@ use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObjectAnnotation;
 use Bazinga\Bundle\HateoasBundle\Tests\Fixtures\SimpleObjectAnnotationAndAttribute;
 use Doctrine\Common\Annotations\AnnotationReader;
 use JMS\SerializerBundle\JMSSerializerBundle;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -30,7 +31,7 @@ class BazingaHateoasExtensionTest extends TestCase
         $this->clearTempDir();
     }
 
-    /** @dataProvider getTestLoadData */
+    #[DataProvider('getTestLoadData')]
     public function testLoad($object)
     {
         $container = $this->getContainerForConfig([[]]);
