@@ -20,7 +20,7 @@ class ExtensionDriverPass implements CompilerPassInterface
     /**
      * {@inheritDoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $extensionDriver = $container->getDefinition('hateoas.configuration.metadata.extension_driver');
 

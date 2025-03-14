@@ -21,7 +21,7 @@ class RelationProviderPass implements CompilerPassInterface
     /**
      * {@inheritDoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $registryDefinition = $container->findDefinition('hateoas.configuration.provider');
 

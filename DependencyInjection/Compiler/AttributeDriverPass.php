@@ -19,7 +19,7 @@ class AttributeDriverPass implements CompilerPassInterface
     /**
      * {@inheritDoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!class_exists(AnnotationReader::class)) {
             $container->removeDefinition('hateoas.configuration.metadata.annotation_reader');
