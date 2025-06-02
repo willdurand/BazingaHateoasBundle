@@ -34,11 +34,15 @@ jobs:
           - "^6.0"
           - "^7.0"
         exclude:
-          # Symfony 3 and 4 would install jms/serializer-bundle:4
+          # Symfony 3-6 would install jms/serializer-bundle:4
           # which is not usable without annotations
           - symfony-require: "^3.0"
             remove-annotations: "yes"
           - symfony-require: "^4.0"
+            remove-annotations: "yes"
+          - symfony-require: "^5.0"
+            remove-annotations: "yes"
+          - symfony-require: "^6.0"
             remove-annotations: "yes"
           # Symfony 7 requires at least PHP 8.2
           - php-version: 8.1
