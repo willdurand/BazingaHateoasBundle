@@ -16,9 +16,6 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class CacheWarmupPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         try {

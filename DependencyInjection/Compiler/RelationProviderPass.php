@@ -18,9 +18,6 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
 class RelationProviderPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function process(ContainerBuilder $container): void
     {
         $registryDefinition = $container->findDefinition('hateoas.configuration.provider');
