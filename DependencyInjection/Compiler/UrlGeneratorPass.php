@@ -17,10 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class UrlGeneratorPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $registryDefinition = $container->getDefinition('hateoas.generator.registry');
 

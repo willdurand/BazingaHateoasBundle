@@ -16,10 +16,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 class CacheWarmupPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         try {
             $warmupService = clone $container->findDefinition('jms_serializer.cache.cache_warmer');
